@@ -199,7 +199,6 @@ export const es = {
   ppFooterTitle: "No te quedes fuera. Empieza tu aventura.",
   ppFooterBtn: "Confirma tu Asistencia",
   ppAlertValid: "¡Código válido! Has desbloqueado: ",
-  ppAlertValid: "¡Código válido! Has desbloqueado: ",
   ppAlertFinished: "¡Ya has completado todas las rutas!",
 
   ppAuthWelcome: "Bienvenido",
