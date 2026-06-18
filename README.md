@@ -1,20 +1,53 @@
 <div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
+  <img src="assets/rutalopo.svg" alt="La Rutalopó Logo" width="150" />
+  <h1>La Rutalopó</h1>
+  <p><strong>Cultura, Muntanya i Llengua</strong></p>
 </div>
 
-# Run and deploy your AI Studio app
+---
 
-This contains everything you need to run your app locally.
+## 🏔️ Sobre el proyecto
 
-View your app in AI Studio: https://ai.studio/apps/884b89d0-0e47-4e1b-af86-be87df0109f9
+La Rutalopó es una plataforma interactiva diseñada para promover el patrimonio natural, cultural y lingüístico mediante rutas de senderismo y gamificación (Passaloport digital). Desarrollada con tecnologías web modernas para ofrecer una experiencia inmersiva.
 
-## Run Locally
+## 🚀 Tecnologías
 
-**Prerequisites:**  Node.js
+*   **Frontend:** React 19, Vite, Tailwind CSS 4, Motion (Animaciones), Lucide React
+*   **Backend & Auth:** Supabase
+*   **Lenguajes:** TypeScript, HTML5, CSS3
 
+## ⚙️ Configuración y Ejecución Local
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+Sigue estos pasos para levantar el entorno de desarrollo en tu máquina:
+
+### 1. Prerrequisitos
+Asegúrate de tener instalado **Node.js** en tu sistema.
+
+### 2. Instalación de dependencias
+Abre tu terminal en la raíz del proyecto y ejecuta:
+```bash
+npm install
+```
+
+### 3. Variables de Entorno
+Crea un archivo `.env` en la raíz (puedes basarte en `.env.example`) y asegúrate de configurar tus claves. Si utilizas la integración con Gemini o Supabase, asegúrate de colocar las variables correspondientes, por ejemplo:
+```env
+GEMINI_API_KEY=tu_api_key_de_gemini
+VITE_SUPABASE_URL=tu_url_de_supabase
+VITE_SUPABASE_ANON_KEY=tu_clave_anonima_de_supabase
+```
+
+### 4. Iniciar el servidor de desarrollo
+Para arrancar el proyecto localmente, ejecuta:
+```bash
+npm run dev
+```
+La aplicación estará disponible en `http://localhost:3000` o en el puerto indicado por Vite.
+
+## 📦 Construcción para Producción (Deploy)
+
+Para generar la versión optimizada lista para producción, ejecuta:
+```bash
+npm run build
+```
+Esto creará una carpeta `dist` que puedes subir fácilmente a plataformas de despliegue estático como Vercel, Netlify o Cloudflare Pages.
