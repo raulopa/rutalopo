@@ -22,7 +22,7 @@ export const InscriptionModal: React.FC<InscriptionModalProps> = ({
   const { t } = useLanguage();
   const [status, setStatus] = useState<InscriptionStatus | null>(null);
   const [loadingStatus, setLoadingStatus] = useState(true);
-  
+
   // Form State
   const [dni, setDni] = useState('');
   const [emailContacto, setEmailContacto] = useState('');
@@ -30,7 +30,7 @@ export const InscriptionModal: React.FC<InscriptionModalProps> = ({
   const [telefonoEmergencias, setTelefonoEmergencias] = useState('');
   const [solicitaFederacion, setSolicitaFederacion] = useState(false);
   const [prevData, setPrevData] = useState<InscriptionPreviousData | null>(null);
-  
+
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [success, setSuccess] = useState(false);
@@ -72,7 +72,7 @@ export const InscriptionModal: React.FC<InscriptionModalProps> = ({
     if (!route?.fecha) return '';
     const date = new Date(route.fecha);
     const dayOfWeek = date.getDay(); // 0 is Sunday, 6 is Saturday
-    
+
     if (dayOfWeek === 0 || dayOfWeek === 6) {
       return <span className="font-semibold text-brand-purple">{t.imInsWeekend}</span>;
     } else {
@@ -86,7 +86,7 @@ export const InscriptionModal: React.FC<InscriptionModalProps> = ({
       setErrorMsg(t.imErrContact);
       return;
     }
-    
+
     if (solicitaFederacion && !dni.trim()) {
       setErrorMsg(t.imErrDni);
       return;
@@ -105,7 +105,7 @@ export const InscriptionModal: React.FC<InscriptionModalProps> = ({
         solicita_federacion: solicitaFederacion,
         fecha_ruta: route.fecha
       });
-      
+
       setSuccess(true);
       setTimeout(() => {
         onSuccess();
@@ -188,13 +188,13 @@ export const InscriptionModal: React.FC<InscriptionModalProps> = ({
                   </div>
                 </div>
 
-                <div className="flex-1 bg-slate-200 rounded-xl overflow-hidden border border-slate-300 min-h-[300px] relative shadow-sm">
+                <div className="flex-1 bg-slate-200 rounded-xl overflow-hidden border border-slate-300 min-h-[250px] h-[300px] max-h-[300px] relative shadow-sm">
                   {route?.wikiloc_id ? (
-                    <iframe 
-                      frameBorder="0" 
-                      scrolling="no" 
-                      src={`https://es.wikiloc.com/wikiloc/spatialArtifacts.do?event=view&id=${route.wikiloc_id}&measures=off&title=off&near=off&images=off&maptype=H`} 
-                      width="100%" 
+                    <iframe
+                      frameBorder="0"
+                      scrolling="no"
+                      src={`https://es.wikiloc.com/wikiloc/spatialArtifacts.do?event=view&id=${route.wikiloc_id}&measures=off&title=off&near=off&images=off&maptype=H`}
+                      width="100%"
                       height="100%"
                       className="absolute inset-0"
                     ></iframe>
@@ -209,204 +209,204 @@ export const InscriptionModal: React.FC<InscriptionModalProps> = ({
 
               {/* RIGHT COLUMN: Form */}
               <div className="p-6">
-            {success ? (
-              <div className="flex flex-col items-center justify-center py-8 text-center space-y-4">
-                <div className="w-16 h-16 bg-emerald-100 text-emerald-500 rounded-full flex items-center justify-center">
-                  <CheckCircle2 className="w-8 h-8" />
-                </div>
-                <div>
-                  <h4 className="text-xl font-bold text-slate-800">{t.imSuccessTitle}</h4>
-                  <p className="text-sm text-slate-500 mt-2">{t.imSuccessDesc}</p>
-                </div>
-              </div>
-            ) : loadingStatus ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 text-brand-purple animate-spin" />
-              </div>
-            ) : status?.usuarioApuntado ? (
-              <div className="flex flex-col items-center justify-center py-8 text-center space-y-4">
-                 <div className="w-16 h-16 bg-blue-100 text-blue-500 rounded-full flex items-center justify-center">
-                  <CheckCircle2 className="w-8 h-8" />
-                </div>
-                <div>
-                  <h4 className="text-xl font-bold text-slate-800">{t.imAlreadyEnrolledTitle}</h4>
-                  <p className="text-sm text-slate-500 mt-2">{t.imAlreadyEnrolledDesc}{route?.nombre}.</p>
-                </div>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                
-                {/* Micro-copy Legal */}
-                <div className="bg-brand-ochre/10 border border-brand-ochre/30 rounded-lg p-3 flex gap-3 items-start">
-                  <ShieldAlert className="w-5 h-5 text-brand-ochre shrink-0 mt-0.5" />
-                  <p className="text-xs text-slate-700 leading-relaxed">
-                    <strong>{t.imLegalWarningTitle}</strong> {t.imLegalWarningBody}
-                  </p>
-                </div>
-
-                {/* Aforo */}
-                <div className="bg-white rounded-lg p-4 border border-slate-100 text-center">
-                  {status?.aforoCompleto ? (
-                    <div className="flex items-center justify-center gap-2 text-red-500 font-bold">
-                      <AlertTriangle className="w-5 h-5" />
-                      <span>{t.imFullCapacity}</span>
+                {success ? (
+                  <div className="flex flex-col items-center justify-center py-8 text-center space-y-4">
+                    <div className="w-16 h-16 bg-emerald-100 text-emerald-500 rounded-full flex items-center justify-center">
+                      <CheckCircle2 className="w-8 h-8" />
                     </div>
-                  ) : (
-                    <div className="text-sm font-medium text-slate-600">
-                      {t.imFreeSpots} <span className="text-brand-purple font-bold text-lg">{status?.aforoRestante}</span> {t.imOf15}
-                    </div>
-                  )}
-                </div>
-
-                {/* Autocompletar */}
-                {prevData && (
-                  <div className="bg-brand-purple/5 border border-brand-purple/20 rounded-lg p-4">
-                    <label className="flex items-start gap-3 cursor-pointer group">
-                      <div className="relative flex items-center justify-center mt-0.5">
-                        <input
-                          type="checkbox"
-                          disabled={submitting || status?.aforoCompleto}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setDni(prevData.dni);
-                              setEmailContacto(prevData.email_contacto);
-                              setTelefonoContacto(prevData.telefono_contacto);
-                              setTelefonoEmergencias(prevData.telefono_emergencias);
-                            }
-                          }}
-                          className="peer sr-only"
-                        />
-                        <div className="w-5 h-5 rounded border-2 border-slate-300 peer-checked:bg-brand-purple peer-checked:border-brand-purple transition-colors"></div>
-                        <CheckCircle2 className="w-3.5 h-3.5 text-white absolute opacity-0 peer-checked:opacity-100 transition-opacity" />
-                      </div>
-                      <div className="flex-1">
-                        <span className="text-sm font-bold text-brand-purple">
-                          {t.imUsePrevData}
-                        </span>
-                        <p className="text-xs text-slate-600 mt-1">
-                          {t.imUsePrevDataDesc}
-                        </p>
-                      </div>
-                    </label>
-                  </div>
-                )}
-
-                {/* Form Inputs */}
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">
-                      {t.imContactData}
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      disabled={submitting || status?.aforoCompleto}
-                      value={emailContacto}
-                      onChange={(e) => setEmailContacto(e.target.value)}
-                      placeholder={t.imEmail}
-                      className="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 text-sm font-medium focus:outline-none focus:border-brand-purple focus:ring-2 focus:ring-brand-purple/20 transition-all disabled:opacity-50 mb-3"
-                    />
-                    <div className="grid grid-cols-2 gap-3">
-                      <input
-                        type="tel"
-                        required
-                        disabled={submitting || status?.aforoCompleto}
-                        value={telefonoContacto}
-                        onChange={(e) => setTelefonoContacto(e.target.value)}
-                        placeholder={t.imPhone}
-                        className="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 text-sm font-medium focus:outline-none focus:border-brand-purple focus:ring-2 focus:ring-brand-purple/20 transition-all disabled:opacity-50"
-                      />
-                      <input
-                        type="tel"
-                        disabled={submitting || status?.aforoCompleto}
-                        value={telefonoEmergencias}
-                        onChange={(e) => setTelefonoEmergencias(e.target.value)}
-                        placeholder={t.imEmergencyPhone}
-                        className="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 text-sm font-medium focus:outline-none focus:border-brand-purple focus:ring-2 focus:ring-brand-purple/20 transition-all disabled:opacity-50"
-                      />
+                    <div>
+                      <h4 className="text-xl font-bold text-slate-800">{t.imSuccessTitle}</h4>
+                      <p className="text-sm text-slate-500 mt-2">{t.imSuccessDesc}</p>
                     </div>
                   </div>
-                </div>
-
-                {/* Seguro */}
-                <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
-                  <label className="flex items-start gap-3 cursor-pointer group mb-3">
-                    <div className="relative flex items-center justify-center mt-0.5">
-                      <input
-                        type="checkbox"
-                        disabled={submitting || status?.aforoCompleto}
-                        checked={solicitaFederacion}
-                        onChange={(e) => setSolicitaFederacion(e.target.checked)}
-                        className="peer sr-only"
-                      />
-                      <div className="w-5 h-5 rounded border-2 border-slate-300 peer-checked:bg-brand-purple peer-checked:border-brand-purple transition-colors"></div>
-                      <CheckCircle2 className="w-3.5 h-3.5 text-white absolute opacity-0 peer-checked:opacity-100 transition-opacity" />
+                ) : loadingStatus ? (
+                  <div className="flex justify-center py-12">
+                    <Loader2 className="w-8 h-8 text-brand-purple animate-spin" />
+                  </div>
+                ) : status?.usuarioApuntado ? (
+                  <div className="flex flex-col items-center justify-center py-8 text-center space-y-4">
+                    <div className="w-16 h-16 bg-blue-100 text-blue-500 rounded-full flex items-center justify-center">
+                      <CheckCircle2 className="w-8 h-8" />
                     </div>
-                    <div className="flex-1">
-                      <span className="text-sm font-bold text-slate-700 group-hover:text-brand-purple transition-colors">
-                        {t.imInsuranceReq}
-                      </span>
-                      <p className="text-xs text-slate-500 mt-1">
-                        {t.imInsuranceDesc}
+                    <div>
+                      <h4 className="text-xl font-bold text-slate-800">{t.imAlreadyEnrolledTitle}</h4>
+                      <p className="text-sm text-slate-500 mt-2">{t.imAlreadyEnrolledDesc}{route?.nombre}.</p>
+                    </div>
+                  </div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-6">
+
+                    {/* Micro-copy Legal */}
+                    <div className="bg-brand-ochre/10 border border-brand-ochre/30 rounded-lg p-3 flex gap-3 items-start">
+                      <ShieldAlert className="w-5 h-5 text-brand-ochre shrink-0 mt-0.5" />
+                      <p className="text-xs text-slate-700 leading-relaxed">
+                        <strong>{t.imLegalWarningTitle}</strong> {t.imLegalWarningBody}
                       </p>
-                      {getInsuranceText() && (
-                        <div className="mt-2 text-xs font-semibold text-brand-purple bg-brand-purple/5 inline-block px-2 py-1 rounded">
-                          {getInsuranceText()}
+                    </div>
+
+                    {/* Aforo */}
+                    <div className="bg-white rounded-lg p-4 border border-slate-100 text-center">
+                      {status?.aforoCompleto ? (
+                        <div className="flex items-center justify-center gap-2 text-red-500 font-bold">
+                          <AlertTriangle className="w-5 h-5" />
+                          <span>{t.imFullCapacity}</span>
+                        </div>
+                      ) : (
+                        <div className="text-sm font-medium text-slate-600">
+                          {t.imFreeSpots} <span className="text-brand-purple font-bold text-lg">{status?.aforoRestante}</span> {t.imOf15}
                         </div>
                       )}
                     </div>
-                  </label>
 
-                  <AnimatePresence>
-                    {solicitaFederacion && (
-                      <motion.div 
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        className="overflow-hidden"
-                      >
-                        <div className="pt-3 border-t border-slate-200/60 mt-2">
-                          <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">
-                            {t.imDniForInsurance}
-                          </label>
+                    {/* Autocompletar */}
+                    {prevData && (
+                      <div className="bg-brand-purple/5 border border-brand-purple/20 rounded-lg p-4">
+                        <label className="flex items-start gap-3 cursor-pointer group">
+                          <div className="relative flex items-center justify-center mt-0.5">
+                            <input
+                              type="checkbox"
+                              disabled={submitting || status?.aforoCompleto}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setDni(prevData.dni);
+                                  setEmailContacto(prevData.email_contacto);
+                                  setTelefonoContacto(prevData.telefono_contacto);
+                                  setTelefonoEmergencias(prevData.telefono_emergencias);
+                                }
+                              }}
+                              className="peer sr-only"
+                            />
+                            <div className="w-5 h-5 rounded border-2 border-slate-300 peer-checked:bg-brand-purple peer-checked:border-brand-purple transition-colors"></div>
+                            <CheckCircle2 className="w-3.5 h-3.5 text-white absolute opacity-0 peer-checked:opacity-100 transition-opacity" />
+                          </div>
+                          <div className="flex-1">
+                            <span className="text-sm font-bold text-brand-purple">
+                              {t.imUsePrevData}
+                            </span>
+                            <p className="text-xs text-slate-600 mt-1">
+                              {t.imUsePrevDataDesc}
+                            </p>
+                          </div>
+                        </label>
+                      </div>
+                    )}
+
+                    {/* Form Inputs */}
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">
+                          {t.imContactData}
+                        </label>
+                        <input
+                          type="email"
+                          required
+                          disabled={submitting || status?.aforoCompleto}
+                          value={emailContacto}
+                          onChange={(e) => setEmailContacto(e.target.value)}
+                          placeholder={t.imEmail}
+                          className="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 text-sm font-medium focus:outline-none focus:border-brand-purple focus:ring-2 focus:ring-brand-purple/20 transition-all disabled:opacity-50 mb-3"
+                        />
+                        <div className="grid grid-cols-2 gap-3">
                           <input
-                            type="text"
+                            type="tel"
                             required
                             disabled={submitting || status?.aforoCompleto}
-                            value={dni}
-                            onChange={(e) => setDni(e.target.value)}
-                            placeholder={t.imDniPlaceholder}
+                            value={telefonoContacto}
+                            onChange={(e) => setTelefonoContacto(e.target.value)}
+                            placeholder={t.imPhone}
+                            className="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 text-sm font-medium focus:outline-none focus:border-brand-purple focus:ring-2 focus:ring-brand-purple/20 transition-all disabled:opacity-50"
+                          />
+                          <input
+                            type="tel"
+                            disabled={submitting || status?.aforoCompleto}
+                            value={telefonoEmergencias}
+                            onChange={(e) => setTelefonoEmergencias(e.target.value)}
+                            placeholder={t.imEmergencyPhone}
                             className="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 text-sm font-medium focus:outline-none focus:border-brand-purple focus:ring-2 focus:ring-brand-purple/20 transition-all disabled:opacity-50"
                           />
                         </div>
-                      </motion.div>
+                      </div>
+                    </div>
+
+                    {/* Seguro */}
+                    <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
+                      <label className="flex items-start gap-3 cursor-pointer group mb-3">
+                        <div className="relative flex items-center justify-center mt-0.5">
+                          <input
+                            type="checkbox"
+                            disabled={submitting || status?.aforoCompleto}
+                            checked={solicitaFederacion}
+                            onChange={(e) => setSolicitaFederacion(e.target.checked)}
+                            className="peer sr-only"
+                          />
+                          <div className="w-5 h-5 rounded border-2 border-slate-300 peer-checked:bg-brand-purple peer-checked:border-brand-purple transition-colors"></div>
+                          <CheckCircle2 className="w-3.5 h-3.5 text-white absolute opacity-0 peer-checked:opacity-100 transition-opacity" />
+                        </div>
+                        <div className="flex-1">
+                          <span className="text-sm font-bold text-slate-700 group-hover:text-brand-purple transition-colors">
+                            {t.imInsuranceReq}
+                          </span>
+                          <p className="text-xs text-slate-500 mt-1">
+                            {t.imInsuranceDesc}
+                          </p>
+                          {getInsuranceText() && (
+                            <div className="mt-2 text-xs font-semibold text-brand-purple bg-brand-purple/5 inline-block px-2 py-1 rounded">
+                              {getInsuranceText()}
+                            </div>
+                          )}
+                        </div>
+                      </label>
+
+                      <AnimatePresence>
+                        {solicitaFederacion && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="overflow-hidden"
+                          >
+                            <div className="pt-3 border-t border-slate-200/60 mt-2">
+                              <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">
+                                {t.imDniForInsurance}
+                              </label>
+                              <input
+                                type="text"
+                                required
+                                disabled={submitting || status?.aforoCompleto}
+                                value={dni}
+                                onChange={(e) => setDni(e.target.value)}
+                                placeholder={t.imDniPlaceholder}
+                                className="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 text-sm font-medium focus:outline-none focus:border-brand-purple focus:ring-2 focus:ring-brand-purple/20 transition-all disabled:opacity-50"
+                              />
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+
+                    {/* Error */}
+                    {errorMsg && (
+                      <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg flex items-start gap-2 border border-red-100">
+                        <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+                        <p className="font-medium">{errorMsg}</p>
+                      </div>
                     )}
-                  </AnimatePresence>
-                </div>
 
-                {/* Error */}
-                {errorMsg && (
-                  <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg flex items-start gap-2 border border-red-100">
-                    <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
-                    <p className="font-medium">{errorMsg}</p>
-                  </div>
+                    {/* Submit */}
+                    <button
+                      type="submit"
+                      disabled={submitting || status?.aforoCompleto}
+                      className="w-full bg-brand-purple hover:bg-[#3d1942] text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2 relative overflow-hidden group"
+                    >
+                      <div className="absolute inset-0 w-full h-full bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      {submitting ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                      ) : (
+                        <span>{t.imSubmitBtn}</span>
+                      )}
+                    </button>
+                  </form>
                 )}
-
-                {/* Submit */}
-                <button
-                  type="submit"
-                  disabled={submitting || status?.aforoCompleto}
-                  className="w-full bg-brand-purple hover:bg-[#3d1942] text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2 relative overflow-hidden group"
-                >
-                  <div className="absolute inset-0 w-full h-full bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  {submitting ? (
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                  ) : (
-                    <span>{t.imSubmitBtn}</span>
-                  )}
-                </button>
-              </form>
-            )}
               </div>
             </div>
           </div>
