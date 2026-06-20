@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'motion/react';
+import { Link } from 'react-router-dom';
 
 interface ShinyButtonProps {
   children: React.ReactNode;
@@ -57,16 +58,32 @@ export function ShinyButton({ children, onClick, className = "", href }: ShinyBu
   );
 
   if (href) {
+    const isExternalOrAnchor = href.startsWith('http') || href.startsWith('#');
+    
+    if (isExternalOrAnchor) {
+      return (
+        <a 
+          ref={buttonRef as any}
+          href={href}
+          className={classes}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          {content}
+        </a>
+      );
+    }
+
     return (
-      <a 
-        ref={buttonRef as any}
-        href={href}
+      <Link 
+        to={href}
         className={classes}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
+        <span ref={buttonRef as any} className="absolute inset-0 block pointer-events-none" />
         {content}
-      </a>
+      </Link>
     );
   }
 

@@ -294,8 +294,8 @@ export default function App() {
                 </p>
               </div>
               <div className="pt-6 mt-8 border-t border-brand-purple/10 flex items-center justify-between text-xs font-mono font-bold text-slate-500">
-                <span>100% LLIURE</span>
-                <span className="text-brand-ochre">AUTONOMÍA</span>
+                <span>{t.conceptTag1a}</span>
+                <span className="text-brand-ochre">{t.conceptTag1b}</span>
               </div>
             </Card3D>
 
@@ -310,8 +310,8 @@ export default function App() {
                 </p>
               </div>
               <div className="pt-6 mt-8 border-t border-brand-purple/10 flex items-center justify-between text-xs font-mono font-bold text-slate-500">
-                <span>BEN D'INTERÉS CULTURAL</span>
-                <span className="text-emerald-700">PATRIMONI</span>
+                <span>{t.conceptTag2a}</span>
+                <span className="text-emerald-700">{t.conceptTag2b}</span>
               </div>
             </Card3D>
 
@@ -326,15 +326,15 @@ export default function App() {
                 </p>
               </div>
               <div className="pt-6 mt-8 border-t border-brand-purple/10 flex items-center justify-between text-xs font-mono font-bold text-slate-500">
-                <span>LLENGUA AUTÒCTONA</span>
-                <span className="text-amber-800">CULTURA</span>
+                <span>{t.conceptTag3a}</span>
+                <span className="text-amber-800">{t.conceptTag3b}</span>
               </div>
             </Card3D>
           </div>
 
           <div className="flex justify-center pt-8">
             <ShinyButton href="#rutas" className="bg-brand-purple text-white shadow-xl">
-              Confirmar Asistencia
+              {t.confirmAttendance}
             </ShinyButton>
           </div>
         </div>
@@ -424,7 +424,7 @@ export default function App() {
             className="inline-flex items-center gap-3 bg-brand-purple hover:bg-brand-purple-dark text-brand-beige font-extrabold px-10 py-5 rounded-2xl text-xl transition-all shadow-[0_0_30px_rgba(212,163,115,0.3)] hover:shadow-[0_0_50px_rgba(255,255,255,0.5)] transform hover:-translate-y-1"
           >
             <Calendar className="w-6 h-6" />
-            Ver Cronograma Interactivo
+            {t.viewInteractiveSchedule}
           </Link>
         </div>
 

@@ -7,6 +7,11 @@ export interface RutaPasaporte {
   fecha: string;
   completada: boolean;
   codigoPegatina: string | null;
+  distancia_km: number | null;
+  desnivel_positivo: number | null;
+  tipo_ruta: string | null;
+  wikiloc_id: string | null;
+  apuntado: boolean;
 }
 
 export const passportService = {
@@ -31,7 +36,12 @@ export const passportService = {
         nombre: r.nombre,
         fecha: r.fecha,
         completada: false,
-        codigoPegatina: null
+        codigoPegatina: null,
+        distancia_km: r.distancia_km,
+        desnivel_positivo: r.desnivel_positivo,
+        tipo_ruta: r.tipo_ruta,
+        wikiloc_id: r.wikiloc_id,
+        apuntado: false
       }));
     }
 
@@ -51,16 +61,32 @@ export const passportService = {
 
     if (errorCodigos) throw errorCodigos;
 
+    // 2.5 Fetch inscriptions for current user
+    const { data: inscripciones, error: errorInscripciones } = await supabase
+      .from('inscripciones')
+      .select('ruta_id')
+      .eq('usuario_id', user.id);
+
+    if (errorInscripciones) throw errorInscripciones;
+
     // 3. Map to unified structure
     const canjeadosMap = new Map<number, string>();
     codigos.forEach(c => canjeadosMap.set(c.ruta_id, c.codigo));
+
+    const inscripcionesSet = new Set<number>();
+    inscripciones?.forEach(i => inscripcionesSet.add(i.ruta_id));
 
     return rutas.map(r => ({
       id: r.id,
       nombre: r.nombre,
       fecha: r.fecha,
       completada: canjeadosMap.has(r.id),
-      codigoPegatina: canjeadosMap.get(r.id) || null
+      codigoPegatina: canjeadosMap.get(r.id) || null,
+      distancia_km: r.distancia_km,
+      desnivel_positivo: r.desnivel_positivo,
+      tipo_ruta: r.tipo_ruta,
+      wikiloc_id: r.wikiloc_id,
+      apuntado: inscripcionesSet.has(r.id)
     }));
   },
 

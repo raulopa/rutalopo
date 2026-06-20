@@ -16,6 +16,7 @@ import { authService } from "../services/authService";
 import { passportService, RutaPasaporte } from "../services/passportService";
 import { useLanguage } from "../context/LanguageContext";
 import { TopBanner } from "../components/TopBanner";
+import { InscriptionModal } from "../components/InscriptionModal";
 
 // --- COMPONENTE B: PANEL DE USUARIO ---
 const DashboardView = ({ user, routesData, onLogout, onReload }: any) => {
@@ -23,6 +24,7 @@ const DashboardView = ({ user, routesData, onLogout, onReload }: any) => {
   const [passcode, setPasscode] = useState("");
   const [validating, setValidating] = useState(false);
   const [successAnim, setSuccessAnim] = useState<number | null>(null);
+  const [inscriptionRoute, setInscriptionRoute] = useState<any>(null);
 
   const completedCount = routesData.filter((r: any) => r.completada).length;
   const totalRoutes = routesData.length;
@@ -169,13 +171,26 @@ const DashboardView = ({ user, routesData, onLogout, onReload }: any) => {
                       </div>
                     </motion.div>
                   ) : (
-                    <div className="flex flex-col items-center opacity-50 grayscale group-hover:opacity-70 transition-opacity">
-                      <div className="w-16 h-16 rounded-full bg-slate-100 border-4 border-white text-slate-300 flex items-center justify-center mb-4 shadow-inner">
-                        <Lock className="w-6 h-6" />
+                    <div className={`flex flex-col items-center transition-all duration-300 ${route.apuntado ? 'opacity-100 grayscale-0' : 'opacity-50 grayscale group-hover:opacity-100 group-hover:grayscale-0'}`}>
+                      <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 shadow-inner transition-all border-4 ${route.apuntado ? 'bg-brand-ochre/20 text-brand-ochre border-brand-ochre/30' : 'bg-slate-100 border-white text-slate-300 group-hover:bg-brand-purple/10 group-hover:text-brand-purple group-hover:border-brand-purple/20'}`}>
+                        {route.apuntado ? <CheckCircle className="w-6 h-6" /> : <Lock className="w-6 h-6" />}
                       </div>
-                      <h4 className="font-bold text-slate-500 text-sm leading-tight">
+                      <h4 className={`font-bold text-sm leading-tight mb-2 ${route.apuntado ? 'text-slate-800' : 'text-slate-500 group-hover:text-brand-purple'}`}>
                         {getRouteName(route.id, route.nombre)}
                       </h4>
+                      
+                      {route.apuntado && (
+                        <div className="bg-brand-ochre/10 border border-brand-ochre/20 text-brand-ochre text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full mb-2">
+                          {t.ppEnrolled}
+                        </div>
+                      )}
+                      
+                      <button
+                        onClick={() => setInscriptionRoute(route)}
+                        className={`mt-2 px-4 py-2 rounded-lg text-xs font-bold transition-all transform ${route.apuntado ? 'bg-slate-100 text-slate-600 hover:bg-slate-200 opacity-100' : 'bg-brand-purple text-white opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0'}`}
+                      >
+                        {route.apuntado ? t.ppViewDetails : t.ppJoinRoute}
+                      </button>
                     </div>
                   )}
                 </div>
@@ -184,6 +199,23 @@ const DashboardView = ({ user, routesData, onLogout, onReload }: any) => {
           })}
         </div>
       </div>
+
+      {inscriptionRoute && (
+        <InscriptionModal
+          isOpen={!!inscriptionRoute}
+          onClose={() => setInscriptionRoute(null)}
+          route={{
+            ...inscriptionRoute,
+            nombre: getRouteName(inscriptionRoute.id, inscriptionRoute.nombre)
+          }}
+          onSuccess={() => {
+            // Visual success feedback
+            setSuccessAnim(inscriptionRoute.id);
+            setTimeout(() => setSuccessAnim(null), 3000);
+            onReload();
+          }}
+        />
+      )}
     </div>
   );
 };
