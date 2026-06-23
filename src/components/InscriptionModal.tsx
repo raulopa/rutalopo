@@ -205,6 +205,13 @@ export const InscriptionModal: React.FC<InscriptionModalProps> = ({
                     </div>
                   )}
                 </div>
+                {/* Micro-copy Legal */}
+                <div className="bg-brand-ochre/10 border mt-2 border-brand-ochre/30 rounded-lg p-3 flex gap-3 items-start">
+                  <ShieldAlert className="w-5 h-5 text-brand-ochre shrink-0 mt-0.5" />
+                  <p className="text-xs text-slate-700 leading-relaxed">
+                    <strong>{t.imLegalWarningTitle}</strong> {t.imLegalWarningBody}
+                  </p>
+                </div>
               </div>
 
               {/* RIGHT COLUMN: Form */}
@@ -235,15 +242,6 @@ export const InscriptionModal: React.FC<InscriptionModalProps> = ({
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-6">
-
-                    {/* Micro-copy Legal */}
-                    <div className="bg-brand-ochre/10 border border-brand-ochre/30 rounded-lg p-3 flex gap-3 items-start">
-                      <ShieldAlert className="w-5 h-5 text-brand-ochre shrink-0 mt-0.5" />
-                      <p className="text-xs text-slate-700 leading-relaxed">
-                        <strong>{t.imLegalWarningTitle}</strong> {t.imLegalWarningBody}
-                      </p>
-                    </div>
-
                     {/* Aforo */}
                     <div className="bg-white rounded-lg p-4 border border-slate-100 text-center">
                       {status?.aforoCompleto ? (
@@ -283,9 +281,6 @@ export const InscriptionModal: React.FC<InscriptionModalProps> = ({
                             <span className="text-sm font-bold text-brand-purple">
                               {t.imUsePrevData}
                             </span>
-                            <p className="text-xs text-slate-600 mt-1">
-                              {t.imUsePrevDataDesc}
-                            </p>
                           </div>
                         </label>
                       </div>
