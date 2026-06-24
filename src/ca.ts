@@ -77,6 +77,7 @@ export const ca = {
   navConcept: "El Concepte",
   navRoutes: "Rutes",
   navIdentity: "Identitat",
+  navShirt: "Samarreta",
   navGuide: "Manual",
   navDigitalPassport: "Passaloport Digital",
   raffleTitle: "Sorteig de Productes de la Terra",
@@ -224,15 +225,15 @@ export const ca = {
   ppDashValidated: "VALIDAT",
 
   // Merchandising (T-Shirt)
-  merchLimited: "Edició Limitada",
+  merchLimited: "Edició Llimitada",
   merchOfficial: "Marxandatge Oficial",
   merchTitle: "La Pell del <br/> Vinalopó",
-  merchDesc: "Una peça tècnica d'alt rendiment dissenyada per a l'aventura. Minimalista, transpirable i amb l'emblema de la nostra comunitat teixit al pit.",
+  merchDesc: "Teixit tècnic i ergonòmic ideal per a rutes. Una peça d'alt rendiment dissenyada per a l'aventura, minimalista i transpirable.",
   merchFeature1Title: "Teixit Ultralleuger",
   merchFeature1Desc: "Assecat ultra ràpid ideal per a gravel i muntanya.",
   merchFeature2Title: "Disseny Harmònic",
   merchFeature2Desc: "Tons arena amb accents en morat raïm clàssic.",
-  merchReserveBtn: "Proximamente",
+  merchReserveBtn: "Sol·licita la teua",
   merchDisclaimer: "* Disponibilitat exclusiva per a participants del Passaloport",
 
   // Passaloport Teaser
@@ -243,7 +244,7 @@ export const ca = {
   passaloportFeature2: "Grup reduït < 50 persones",
   passaloportFeature3: "Esperit no competitiu",
   octShort: "OCT",
-  passaloportExploreBtn: "Explorar el Passaloport i Sortejos",
+  passaloportExploreBtn: "Explorar el Passaloport",
   routesSectionTitle: "Els 5 Dies del Vinalopó",
   routesSectionDesc: "Rutes oficials emmagatzemades a Wikiloc. Selecciona la teua etapa per a visualitzar el recorregut i les seues dades tècniques.",
 
@@ -297,16 +298,39 @@ export const ca = {
   imErrDni: "El DNI/NIE és obligatori per a tramitar l'assegurança FEMECV.",
   imInsWeekend: "Es tramitarà l'assegurança FEMECV de cap de setmana (2 dies)",
   imInsWeek: "Es tramitarà l'assegurança FEMECV setmanal (7 dies)",
-
+  imUnenrollBtn: "Desapuntar-se de la Ruta",
+  imConfirmUnenroll: "Estàs segur que vols desapuntar-te d'aquesta ruta? Aquesta acció cancel·larà la teua inscripció.",
   // Passaloport App Page extras
   ppEnrolled: "Apuntat",
   ppViewDetails: "Vore detalls",
-  ppJoinRoute: "¿Apuntar-se a aquesta ruta?",
+  ppJoinRoute: "Apuntar-se a la ruta",
   viewInteractiveSchedule: "Vore Cronograma Interactiu",
   conceptTag1a: "100% LLIURE",
   conceptTag1b: "AUTONOMIA",
   conceptTag2a: "BÉ D'INTERÉS CULTURAL",
   conceptTag2b: "PATRIMONI",
   conceptTag3a: "LLENGUA AUTÒCTONA",
-  conceptTag3b: "CULTURA"
+  conceptTag3b: "CULTURA",
+
+  // Camiseta Page
+  shirtTitle: "Samarreta Tècnica La Rutalopó",
+  shirtSubtitle: "Teixit tècnic i ergonòmic ideal per a rutes. Disseny exclusiu.",
+  shirtPrice: "15€",
+  shirtBuy: "Demana la teua",
+  shirtFeaturesTitle: "Característiques",
+  shirtFeature1: "Teixit transpirable d'alta tecnologia",
+  shirtFeature2: "Ajust ergonòmic per a màxim confort",
+  shirtFeature3: "Assecat ultraràpid",
+  shirtBack: "Tornar a l'Inici",
+  shirtModalTitle: "Sol·licitar Samarreta",
+  shirtModalEmail: "Email de contacte",
+  shirtModalEmailRegistered: "Utilitzarem el teu email registrat",
+  shirtModalPhone: "Telèfon",
+  shirtModalSize: "Talla",
+  shirtModalCancel: "Cancel·lar",
+  shirtModalSubmit: "Sol·licitar",
+  shirtModalSubmitting: "Enviant...",
+  shirtModalErrorFields: "Si us plau, emplena els camps requerits.",
+  shirtModalSuccess: "Comanda realitzada amb èxit! Ens posarem en contacte amb tu.",
+  shirtModalErrorSubmit: "S'ha produït un error en realitzar la comanda."
 };

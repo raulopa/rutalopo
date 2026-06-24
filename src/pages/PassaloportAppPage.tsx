@@ -17,10 +17,27 @@ import { passportService, RutaPasaporte } from "../services/passportService";
 import { useLanguage } from "../context/LanguageContext";
 import { TopBanner } from "../components/TopBanner";
 import { InscriptionModal } from "../components/InscriptionModal";
+import { RouteCard } from "../components/RouteCard";
+import { useToast } from "../context/ToastContext";
+
+const stickerImages: Record<string, string> = import.meta.glob('../../assets/iconos_pegatinas/*', { eager: true, import: 'default' });
+
+const getStickerUrl = (prefix: string | null) => {
+  if (!prefix) return null;
+  const match = Object.entries(stickerImages).find(([path]) => {
+    const file = path.split('/').pop();
+    if (!file) return false;
+    const cleanFile = file.split('.')[0].toUpperCase();
+    const cleanPrefix = prefix.toUpperCase();
+    return cleanFile === cleanPrefix || file.toUpperCase() === cleanPrefix;
+  });
+  return match ? match[1] : null;
+};
 
 // --- COMPONENTE B: PANEL DE USUARIO ---
 const DashboardView = ({ user, routesData, onLogout, onReload }: any) => {
   const { lang, t } = useLanguage();
+  const { addToast } = useToast();
   const [passcode, setPasscode] = useState("");
   const [validating, setValidating] = useState(false);
   const [successAnim, setSuccessAnim] = useState<number | null>(null);
@@ -46,8 +63,9 @@ const DashboardView = ({ user, routesData, onLogout, onReload }: any) => {
         setTimeout(() => setSuccessAnim(null), 3000);
       }
       setPasscode("");
+      addToast(t.ppDashValidateSuccess || "Pegatina canjeada con éxito", "success");
     } catch (err: any) {
-      alert(err.message || t.ppDashValidateError);
+      addToast(err.message || t.ppDashValidateError, 'error');
     } finally {
       setValidating(false);
     }
@@ -132,69 +150,54 @@ const DashboardView = ({ user, routesData, onLogout, onReload }: any) => {
         <h3 className="text-2xl font-extrabold text-brand-purple">{t.ppDashCollection}</h3>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-          {(routesData.length > 0 ? routesData : routesList.map((r, i) => ({ id: i + 1, nombre: r.langs.es.name, fecha: '2026-10-08', completada: false, codigoPegatina: null }))).map((route: any) => {
+          {(routesData.length > 0 ? routesData : routesList.map((r, i) => ({ id: i + 1, nombre: r.langs.es.name, fecha: '2026-10-08', completada: false, codigoPegatina: null }))).map((route: any, index: number) => {
             const isUnlocked = route.completada;
             const isJustUnlocked = successAnim === route.id;
 
             return (
-              <motion.div
-                key={route.id}
-                animate={isJustUnlocked ? { scale: [1, 1.05, 1], rotate: [0, 2, -2, 0] } : {}}
-                transition={{ duration: 0.5 }}
-                className={`aspect-[3/4] rounded-2xl border-2 flex flex-col p-5 transition-all duration-300 relative overflow-hidden group ${isUnlocked
-                  ? 'border-brand-purple bg-white shadow-lg shadow-brand-purple/10'
-                  : 'border-slate-100 bg-slate-50'
-                  }`}
-              >
-                {/* Decorative background shape for unlocked */}
-                {isUnlocked && (
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-brand-purple/5 rounded-bl-[100px] -z-0"></div>
-                )}
-
-                <div className="text-xs font-bold text-slate-400 mb-2 relative z-10 text-center">
-                  {route.fecha || t.ppDashComingSoon}
-                </div>
-
-                <div className="flex-1 flex flex-col items-center justify-center text-center relative z-10">
-                  {isUnlocked ? (
-                    <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="flex flex-col items-center">
-                      <div className="w-16 h-16 rounded-full bg-emerald-50 border-4 border-emerald-100 text-emerald-500 flex items-center justify-center mb-4 shadow-inner">
-                        <CheckCircle className="w-8 h-8" />
-                      </div>
-                      <h4 className="font-extrabold text-brand-purple text-sm leading-tight mb-3">
-                        {getRouteName(route.id, route.nombre)}
-                      </h4>
-                      <div className="bg-brand-purple/10 px-3 py-1.5 rounded-lg border border-brand-purple/20">
-                        <span className="text-[11px] font-mono font-bold text-brand-purple">
-                          {route.codigoPegatina || t.ppDashValidated}
-                        </span>
-                      </div>
-                    </motion.div>
-                  ) : (
-                    <div className={`flex flex-col items-center transition-all duration-300 opacity-100 grayscale-0`}>
-                      <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 shadow-inner transition-all border-4 ${route.apuntado ? 'bg-brand-ochre/20 text-brand-ochre border-brand-ochre/30' : 'bg-brand-purple/5 border-brand-purple/10 text-brand-purple'}`}>
-                        {route.apuntado ? <CheckCircle className="w-6 h-6" /> : <Lock className="w-6 h-6" />}
-                      </div>
-                      <h4 className={`font-bold text-sm leading-tight mb-2 ${route.apuntado ? 'text-slate-800' : 'text-slate-700'}`}>
-                        {getRouteName(route.id, route.nombre)}
-                      </h4>
-                      
-                      {route.apuntado && (
-                        <div className="bg-brand-ochre/10 border border-brand-ochre/20 text-brand-ochre text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full mb-2">
-                          {t.ppEnrolled}
-                        </div>
-                      )}
-                      
-                      <button
-                        onClick={() => setInscriptionRoute(route)}
-                        className={`mt-2 px-4 py-2 rounded-lg text-xs font-bold transition-all ${route.apuntado ? 'bg-slate-100 text-slate-600 hover:bg-slate-200' : 'bg-brand-purple text-white hover:bg-brand-purple-dark shadow-md'}`}
-                      >
-                        {route.apuntado ? t.ppViewDetails : t.ppJoinRoute}
-                      </button>
+              <React.Fragment key={route.id}>
+                {isUnlocked ? (
+                  <RouteCard
+                    title={getRouteName(route.id, route.nombre)}
+                    date={route.fecha || t.ppDashComingSoon}
+                    code={route.codigoPegatina || null}
+                    imageUrl={getStickerUrl(route.codigo_prefijo) || null}
+                    isJustUnlocked={isJustUnlocked}
+                    index={index}
+                    fallbackText={t.ppDashValidated}
+                    distancia={route.distancia_km}
+                    desnivel={route.desnivel_positivo}
+                  />
+                ) : (
+                  <motion.div
+                    className="aspect-[3/4] rounded-2xl border-2 border-slate-100 bg-slate-50 flex flex-col p-5 relative overflow-hidden"
+                  >
+                  <div className={`flex flex-col items-center justify-center h-full transition-all duration-300 opacity-100 grayscale-0`}>
+                    <div className="text-xs font-bold text-slate-400 mb-4 text-center">
+                      {route.fecha || t.ppDashComingSoon}
                     </div>
-                  )}
-                </div>
-              </motion.div>
+                    <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 shadow-inner transition-all border-4 ${route.apuntado ? 'bg-brand-ochre/20 text-brand-ochre border-brand-ochre/30' : 'bg-brand-purple/5 border-brand-purple/10 text-brand-purple'}`}>
+                      {route.apuntado ? <CheckCircle className="w-6 h-6" /> : <Lock className="w-6 h-6" />}
+                    </div>
+                    <h4 className={`font-bold text-sm leading-tight mb-2 text-center ${route.apuntado ? 'text-slate-800' : 'text-slate-700'}`}>
+                      {getRouteName(route.id, route.nombre)}
+                    </h4>
+                    {route.apuntado && (
+                      <div className="bg-brand-ochre/10 border border-brand-ochre/20 text-brand-ochre text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full mb-2">
+                        {t.ppEnrolled}
+                      </div>
+                    )}
+
+                    <button
+                      onClick={() => setInscriptionRoute(route)}
+                      className={`mt-2 px-4 py-2 rounded-lg text-xs font-bold transition-all ${route.apuntado ? 'bg-slate-100 text-slate-600 hover:bg-slate-200' : 'bg-brand-purple text-white hover:bg-brand-purple-dark shadow-md'}`}
+                    >
+                      {route.apuntado ? t.ppViewDetails : t.ppJoinRoute}
+                    </button>
+                  </div>
+                  </motion.div>
+                )}
+              </React.Fragment>
             );
           })}
         </div>
@@ -224,6 +227,7 @@ const DashboardView = ({ user, routesData, onLogout, onReload }: any) => {
 export default function PassaloportAppPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { addToast } = useToast();
   const [user, setUser] = useState<any>(null);
   const [routesData, setRoutesData] = useState<RutaPasaporte[]>([]);
   const [loading, setLoading] = useState(true);
@@ -240,6 +244,7 @@ export default function PassaloportAppPage() {
       }
     } catch (err) {
       console.error(err);
+      addToast('Error al cargar los datos', 'error');
     } finally {
       setLoading(false);
     }

@@ -6,9 +6,11 @@ import { Link } from 'react-router-dom';
 import { ChevronLeft, Calendar, Clock, Map, Info } from 'lucide-react';
 import { motion } from 'motion/react';
 import { CurvedRoadmap } from '../components/CurvedRoadmap';
+import { useToast } from '../context/ToastContext';
 
 export default function SchedulePage() {
   const { t } = useLanguage();
+  const { addToast } = useToast();
   const [rutas, setRutas] = useState<RutaAdmin[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -19,6 +21,7 @@ export default function SchedulePage() {
         setRutas(data);
       } catch (err) {
         console.error(err);
+        addToast('Error al cargar el cronograma', 'error');
       } finally {
         setLoading(false);
       }

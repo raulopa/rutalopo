@@ -7,6 +7,7 @@ export interface RutaPasaporte {
   fecha: string;
   completada: boolean;
   codigoPegatina: string | null;
+  codigo_prefijo: string | null;
   distancia_km: number | null;
   desnivel_positivo: number | null;
   tipo_ruta: string | null;
@@ -27,7 +28,8 @@ export const passportService = {
       const { data: rutas, error: errorRutas } = await supabase
         .from('rutas')
         .select('*')
-        .order('fecha', { ascending: true });
+        .order('fecha', { ascending: true })
+        .order('hora', { ascending: true });
         
       if (errorRutas) throw errorRutas;
       
@@ -37,6 +39,7 @@ export const passportService = {
         fecha: r.fecha,
         completada: false,
         codigoPegatina: null,
+        codigo_prefijo: r.codigo_prefijo || null,
         distancia_km: r.distancia_km,
         desnivel_positivo: r.desnivel_positivo,
         tipo_ruta: r.tipo_ruta,
@@ -49,7 +52,8 @@ export const passportService = {
     const { data: rutas, error: errorRutas } = await supabase
       .from('rutas')
       .select('*')
-      .order('fecha', { ascending: true });
+      .order('fecha', { ascending: true })
+      .order('hora', { ascending: true });
 
     if (errorRutas) throw errorRutas;
 
@@ -57,7 +61,8 @@ export const passportService = {
     const { data: codigos, error: errorCodigos } = await supabase
       .from('codigos_pegatinas')
       .select('codigo, ruta_id')
-      .eq('usuario_id', user.id);
+      .eq('usuario_id', user.id)
+      .not('canjeado_el', 'is', null);
 
     if (errorCodigos) throw errorCodigos;
 
@@ -82,6 +87,7 @@ export const passportService = {
       fecha: r.fecha,
       completada: canjeadosMap.has(r.id),
       codigoPegatina: canjeadosMap.get(r.id) || null,
+      codigo_prefijo: r.codigo_prefijo || null,
       distancia_km: r.distancia_km,
       desnivel_positivo: r.desnivel_positivo,
       tipo_ruta: r.tipo_ruta,
@@ -96,10 +102,10 @@ export const passportService = {
     const user = await authService.getCurrentUser();
     if (!user) throw new Error("Debes iniciar sesión para validar tu pegatina.");
 
-    // First, verify the code is available
+    // First, verify the code exists and check who it belongs to
     const { data: codigoData, error: errorCheck } = await supabase
       .from('codigos_pegatinas')
-      .select('usuario_id')
+      .select('usuario_id, canjeado_el')
       .eq('codigo', codigoIntroducido)
       .single();
 
@@ -107,11 +113,12 @@ export const passportService = {
       throw new Error("El código no existe o es incorrecto.");
     }
 
-    if (codigoData.usuario_id !== null) {
-      if (codigoData.usuario_id === user.id) {
-        throw new Error("Ya has validado este código anteriormente.");
-      }
-      throw new Error("Este código ya ha sido canjeado por otro usuario.");
+    if (codigoData.usuario_id !== user.id) {
+      throw new Error("Este código no te pertenece o no es válido para ti.");
+    }
+
+    if (codigoData.canjeado_el !== null) {
+      throw new Error("Ya has validado este código anteriormente.");
     }
 
     // It's available, let's claim it via UPDATE

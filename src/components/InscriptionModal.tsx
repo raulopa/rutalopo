@@ -4,7 +4,10 @@ import { X, ShieldAlert, CheckCircle2, AlertTriangle, Loader2, Map, Calendar } f
 import { inscriptionService, InscriptionStatus, InscriptionPreviousData } from '../services/inscriptionService';
 import { useLanguage } from '../context/LanguageContext';
 import { RutaPasaporte } from '../services/passportService';
+import { Modal } from './Modal';
+import { ConfirmModal } from './ConfirmModal';
 import { Mountain, Navigation, Activity } from 'lucide-react';
+import { useToast } from '../context/ToastContext';
 
 interface InscriptionModalProps {
   isOpen: boolean;
@@ -20,6 +23,7 @@ export const InscriptionModal: React.FC<InscriptionModalProps> = ({
   onSuccess
 }) => {
   const { t } = useLanguage();
+  const { addToast } = useToast();
   const [status, setStatus] = useState<InscriptionStatus | null>(null);
   const [loadingStatus, setLoadingStatus] = useState(true);
 
@@ -32,8 +36,8 @@ export const InscriptionModal: React.FC<InscriptionModalProps> = ({
   const [prevData, setPrevData] = useState<InscriptionPreviousData | null>(null);
 
   const [submitting, setSubmitting] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
   const [success, setSuccess] = useState(false);
+  const [showConfirmUnenroll, setShowConfirmUnenroll] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -44,7 +48,6 @@ export const InscriptionModal: React.FC<InscriptionModalProps> = ({
       setTelefonoEmergencias('');
       setSolicitaFederacion(false);
       setSubmitting(false);
-      setErrorMsg('');
       setSuccess(false);
       setPrevData(null);
       loadStatus();
@@ -62,7 +65,7 @@ export const InscriptionModal: React.FC<InscriptionModalProps> = ({
       setPrevData(previousData);
     } catch (err) {
       console.error(err);
-      setErrorMsg('Error al cargar el estado de la ruta.');
+      addToast('Error al cargar el estado de la ruta.', 'error');
     } finally {
       setLoadingStatus(false);
     }
@@ -83,17 +86,16 @@ export const InscriptionModal: React.FC<InscriptionModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!emailContacto.trim() || !telefonoContacto.trim()) {
-      setErrorMsg(t.imErrContact);
+      addToast(t.imErrContact, 'error');
       return;
     }
 
     if (solicitaFederacion && !dni.trim()) {
-      setErrorMsg(t.imErrDni);
+      addToast(t.imErrDni, 'error');
       return;
     }
 
     setSubmitting(true);
-    setErrorMsg('');
 
     try {
       await inscriptionService.inscribirseARuta({
@@ -113,49 +115,17 @@ export const InscriptionModal: React.FC<InscriptionModalProps> = ({
       }, 2000);
 
     } catch (err: any) {
-      setErrorMsg(err.message || 'Ocurrió un error al intentar inscribirse.');
+      addToast(err.message || 'Ocurrió un error al intentar inscribirse.', 'error');
     } finally {
       setSubmitting(false);
     }
   };
 
-  if (!isOpen) return null;
-
   return (
-    <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
-        {/* Backdrop */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={onClose}
-          className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
-        />
-
-        {/* Modal Content */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative w-full max-w-4xl bg-brand-beige rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] border border-slate-200"
-        >
-          {/* Header */}
-          <div className="flex items-center justify-between p-5 border-b border-brand-purple/10 bg-white/50 shrink-0">
-            <h3 className="font-extrabold text-brand-purple text-lg font-poppins">
-              {t.imTitle}
-            </h3>
-            <button
-              onClick={onClose}
-              className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-
-          <div className="flex-1 overflow-y-auto font-poppins">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-0 divide-y md:divide-y-0 md:divide-x divide-slate-200 h-full">
-              {/* LEFT COLUMN: Map & Stats */}
+    <>
+      <Modal isOpen={isOpen} onClose={onClose} title={t.imTitle} maxWidth="max-w-4xl">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 divide-y md:divide-y-0 md:divide-x divide-slate-200 h-full">
+          {/* LEFT COLUMN: Map & Stats */}
               <div className="p-6 bg-slate-50 flex flex-col">
                 <div className="bg-white rounded-xl p-4 mb-6 border border-slate-200 flex items-start gap-4 text-left shadow-sm">
                   <div className="w-12 h-12 rounded-full bg-brand-purple/10 text-brand-purple flex items-center justify-center shrink-0">
@@ -238,6 +208,16 @@ export const InscriptionModal: React.FC<InscriptionModalProps> = ({
                     <div>
                       <h4 className="text-xl font-bold text-slate-800">{t.imAlreadyEnrolledTitle}</h4>
                       <p className="text-sm text-slate-500 mt-2">{t.imAlreadyEnrolledDesc}{route?.nombre}.</p>
+                    </div>
+                    <div className="mt-4 w-full px-4">
+                      <button
+                        onClick={() => setShowConfirmUnenroll(true)}
+                        disabled={submitting}
+                        className="w-full bg-red-50 hover:bg-red-100 text-red-600 font-bold py-3 px-4 rounded-xl transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                      >
+                        <X className="w-5 h-5" />
+                        {t.imUnenrollBtn || 'Desapuntarse de la Ruta'}
+                      </button>
                     </div>
                   </div>
                 ) : (
@@ -379,14 +359,6 @@ export const InscriptionModal: React.FC<InscriptionModalProps> = ({
                       </AnimatePresence>
                     </div>
 
-                    {/* Error */}
-                    {errorMsg && (
-                      <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg flex items-start gap-2 border border-red-100">
-                        <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
-                        <p className="font-medium">{errorMsg}</p>
-                      </div>
-                    )}
-
                     {/* Submit */}
                     <button
                       type="submit"
@@ -404,9 +376,30 @@ export const InscriptionModal: React.FC<InscriptionModalProps> = ({
                 )}
               </div>
             </div>
-          </div>
-        </motion.div>
-      </div>
-    </AnimatePresence>
+      </Modal>
+
+      <ConfirmModal
+        isOpen={showConfirmUnenroll}
+        onClose={() => setShowConfirmUnenroll(false)}
+        title={t.imUnenrollBtn || 'Desapuntarse de la Ruta'}
+        message={t.imConfirmUnenroll || '¿Estás seguro de que quieres desapuntarte de esta ruta? Esta acción cancelará tu inscripción.'}
+        isDestructive={true}
+        isLoading={submitting}
+        onConfirm={async () => {
+          setSubmitting(true);
+          try {
+            await inscriptionService.desapuntarseDeRuta(route.id);
+            await loadStatus();
+            setShowConfirmUnenroll(false);
+            onSuccess();
+          } catch (err: any) {
+            addToast(err.message || 'Ocurrió un error al intentar desapuntarse.', 'error');
+            setShowConfirmUnenroll(false); // Close modal to show error in parent
+          } finally {
+            setSubmitting(false);
+          }
+        }}
+      />
+    </>
   );
 };

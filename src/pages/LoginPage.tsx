@@ -5,30 +5,30 @@ import { motion } from "motion/react";
 import { authService } from "../services/authService";
 import { useLanguage } from "../context/LanguageContext";
 import { TopBanner } from "../components/TopBanner";
+import { useToast } from "../context/ToastContext";
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useLanguage();
+  const { addToast } = useToast();
 
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const from = location.state?.from?.pathname || -1;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
     setLoading(true);
     try {
       if (authMode === 'login') {
         await authService.loginUser(email, password);
       } else {
         await authService.registerUser(email, password);
-        alert(t.ppAuthSuccessRegister || "Registro completado con éxito");
+        addToast(t.ppAuthSuccessRegister || "Registro completado con éxito", 'success');
       }
       
       // Determine where to navigate
@@ -41,7 +41,7 @@ export default function LoginPage() {
         navigate(-1);
       }
     } catch (err: any) {
-      setError(err.message || t.ppAuthError || "Error de autenticación");
+      addToast(err.message || t.ppAuthError || "Error de autenticación", 'error');
     } finally {
       setLoading(false);
     }
@@ -82,11 +82,6 @@ export default function LoginPage() {
           </div>
 
           <div className="p-8">
-            {error && (
-              <div className="bg-red-50 text-red-600 text-sm p-4 rounded-xl mb-6 border border-red-100 font-medium">
-                {error}
-              </div>
-            )}
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
@@ -134,7 +129,6 @@ export default function LoginPage() {
                 type="button"
                 onClick={() => {
                   setAuthMode(authMode === 'login' ? 'register' : 'login');
-                  setError("");
                 }}
                 className="text-sm text-slate-500 hover:text-brand-purple font-semibold transition-colors"
               >

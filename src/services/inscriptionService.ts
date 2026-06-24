@@ -77,6 +77,21 @@ export const inscriptionService = {
       }
     }
 
+    // Generar código de pegatina
+    const { data: rutaData } = await supabase
+      .from('rutas')
+      .select('codigo_prefijo')
+      .eq('id', data.ruta_id)
+      .single();
+
+    let prefijoLimpio = 'RUTA';
+    if (rutaData?.codigo_prefijo) {
+      prefijoLimpio = rutaData.codigo_prefijo.split('.')[0].toUpperCase();
+    }
+
+    const randomChars = Math.random().toString(36).substring(2, 7).toUpperCase();
+    const codigoPegatina = `${prefijoLimpio}-${randomChars}`;
+
     const { error } = await supabase
       .from('inscripciones')
       .insert([
@@ -100,6 +115,54 @@ export const inscriptionService = {
         throw new Error('Ya estás inscrito en esta ruta.');
       }
       throw error;
+    }
+
+    // Insertar el código vinculado al usuario, pero no canjeado
+    const { error: errorCodigo } = await supabase
+      .from('codigos_pegatinas')
+      .insert([
+        {
+          codigo: codigoPegatina,
+          ruta_id: data.ruta_id,
+          usuario_id: user.id,
+          canjeado_el: null
+        }
+      ]);
+
+    if (errorCodigo) {
+      console.error("Error al generar el código de pegatina:", errorCodigo);
+    }
+
+    return true;
+  },
+
+  async desapuntarseDeRuta(ruta_id: number): Promise<boolean> {
+    if (!supabase) throw new Error("Supabase is not configured.");
+
+    const user = await authService.getCurrentUser();
+    if (!user) throw new Error("Debes iniciar sesión para desapuntarte.");
+
+    // Eliminar la inscripción (esto requiere una política RLS de DELETE)
+    const { error } = await supabase
+      .from('inscripciones')
+      .delete()
+      .eq('usuario_id', user.id)
+      .eq('ruta_id', ruta_id);
+
+    if (error) {
+      throw error;
+    }
+
+    // Intentar eliminar también el código de pegatina si no está canjeado
+    const { error: errorCodigo } = await supabase
+      .from('codigos_pegatinas')
+      .delete()
+      .eq('usuario_id', user.id)
+      .eq('ruta_id', ruta_id)
+      .is('canjeado_el', null);
+
+    if (errorCodigo) {
+      console.error("Error al eliminar el código de pegatina:", errorCodigo);
     }
 
     return true;

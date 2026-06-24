@@ -77,6 +77,7 @@ export const en = {
   navConcept: "Concept",
   navRoutes: "Trails",
   navIdentity: "Identity",
+  navShirt: "T-Shirt",
   navGuide: "Guide",
   navDigitalPassport: "Digital Passaloport",
   raffleTitle: "Regional Soil Draw Raffle",
@@ -232,14 +233,14 @@ export const en = {
   merchLimited: "Limited Edition",
   merchOfficial: "Official Merchandise",
   merchTitle: "The Skin of <br/> Vinalopó",
-  merchDesc: "A high-performance technical garment designed for adventure. Minimalist, breathable, and featuring our community emblem woven on the chest.",
+  merchDesc: "Technical and ergonomic fabric ideal for routes. A high-performance garment designed for adventure, minimalist and breathable.",
   merchFeature1Title: "Ultralight Fabric",
   merchFeature1Desc: "Ultra-fast drying, ideal for gravel and mountain hiking.",
   merchFeature2Title: "Harmonic Design",
   merchFeature2Desc: "Sand tones with classic grape purple accents.",
   merchReserveBtn: "Pre-order T-Shirt",
   merchDisclaimer: "* Exclusive availability for Passaloport participants",
-  
+
   // Passaloport Teaser
   passaloportHeroTitle1: "Complete trails. Collect stickers.",
   passaloportHeroTitle2: "Win the Vinalopó.",
@@ -248,10 +249,10 @@ export const en = {
   passaloportFeature2: "Small group < 50 people",
   passaloportFeature3: "Non-competitive spirit",
   octShort: "OCT",
-  passaloportExploreBtn: "Explore Passaloport & Raffles",
+  passaloportExploreBtn: "Explore Passaloport",
   routesSectionTitle: "The 5 Days of Vinalopó",
   routesSectionDesc: "Official trails stored on Wikiloc. Select your stage to view the route and its technical data.",
-  
+
   // UI Extras
   navLogin: "Login",
   confirmAttendance: "Confirm Attendance",
@@ -259,7 +260,7 @@ export const en = {
   startCollection: "Start your Collection",
   backBtn: "Back",
   infoPassaloport: "Passaloport Info",
-  
+
   // Schedule Page
   navSchedule: "Schedule",
   scheduleTitle: "Itinerary & Schedule",
@@ -302,6 +303,8 @@ export const en = {
   imErrDni: "ID/Passport is required to process the FEMECV insurance.",
   imInsWeekend: "Weekend FEMECV insurance will be processed (2 days)",
   imInsWeek: "Weekly FEMECV insurance will be processed (7 days)",
+  imUnenrollBtn: "Unenroll from Route",
+  imConfirmUnenroll: "Are you sure you want to unenroll from this route? This action will cancel your registration.",
 
   // Passaloport App Page extras
   ppEnrolled: "Enrolled",
@@ -313,5 +316,27 @@ export const en = {
   conceptTag2a: "CULTURAL INTEREST ASSET",
   conceptTag2b: "HERITAGE",
   conceptTag3a: "NATIVE LANGUAGE",
-  conceptTag3b: "CULTURE"
+  conceptTag3b: "CULTURE",
+
+  // Camiseta Page
+  shirtTitle: "La Rutalopó Technical T-Shirt",
+  shirtSubtitle: "Technical and ergonomic fabric ideal for trails. Exclusive design.",
+  shirtPrice: "15€",
+  shirtBuy: "Request yours",
+  shirtFeaturesTitle: "Features",
+  shirtFeature1: "High-tech breathable fabric",
+  shirtFeature2: "Ergonomic fit for maximum comfort",
+  shirtFeature3: "Ultra-fast drying",
+  shirtBack: "Back to Home",
+  shirtModalTitle: "Request T-Shirt",
+  shirtModalEmail: "Contact email",
+  shirtModalEmailRegistered: "We will use your registered email",
+  shirtModalPhone: "Phone",
+  shirtModalSize: "Size",
+  shirtModalCancel: "Cancel",
+  shirtModalSubmit: "Request",
+  shirtModalSubmitting: "Sending...",
+  shirtModalErrorFields: "Please fill in the required fields.",
+  shirtModalSuccess: "Order placed successfully! We will contact you soon.",
+  shirtModalErrorSubmit: "There was an error placing the order."
 };

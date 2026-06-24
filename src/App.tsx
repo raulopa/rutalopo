@@ -34,7 +34,7 @@ import { ShinyButton } from "./components/animations/ShinyButton";
 import { Card3D } from "./components/animations/Card3D";
 import { ScrollPath } from "./components/animations/ScrollPath";
 import cidBg from "../assets/cid.png";
-import camisetaImg from "../assets/camiseta.png";
+import camisetaDetrasImg from "../assets/camiseta_detras.webp";
 
 export default function App() {
   // Lang & Auth state
@@ -163,7 +163,7 @@ export default function App() {
             <Link to="/passaloport" className="hover:text-brand-purple transition-colors">Passaloport</Link>
             <Link to="/cronograma" className="hover:text-brand-purple transition-colors">{t.navSchedule}</Link>
             <a href="#rutas" className="hover:text-brand-purple transition-colors">{t.navRoutes}</a>
-            <a href="#identitat" className="hover:text-brand-purple transition-colors">{t.navIdentity}</a>
+            <Link to="/camiseta" className="hover:text-brand-purple transition-colors">{t.navShirt}</Link>
             <a href="#manual" className="hover:text-brand-purple transition-colors">{t.navGuide}</a>
           </nav>
 
@@ -471,9 +471,9 @@ export default function App() {
               <div className="absolute inset-0 bg-brand-ochre/20 rounded-3xl transform rotate-3 scale-105 transition-transform group-hover:rotate-6 group-hover:scale-110 duration-500"></div>
               <div className="relative bg-brand-beige rounded-3xl p-8 border-2 border-brand-purple/10 shadow-2xl aspect-[4/5] flex items-center justify-center overflow-hidden">
                 <img
-                  src={camisetaImg}
+                  src={camisetaDetrasImg}
                   alt="Camiseta Oficial La Rutalopó"
-                  className="w-full h-full object-cover rounded-2xl mix-blend-multiply opacity-90 transition-transform duration-700 group-hover:scale-105"
+                  className="w-full h-full object-contain mix-blend-multiply opacity-90 transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute top-4 left-4 bg-brand-purple text-brand-beige text-[10px] font-mono font-bold uppercase tracking-widest px-3 py-1.5 rounded-full shadow-lg">
                   {t.merchLimited}
@@ -497,10 +497,10 @@ export default function App() {
                 </p>
               </div>
               <div className="pt-6">
-                <button className="bg-brand-purple hover:bg-brand-purple-hover text-white px-8 py-4 rounded-xl font-bold transition-all shadow-xl hover:shadow-brand-purple/30 flex items-center gap-3">
+                <Link to="/camiseta" className="inline-flex w-auto bg-brand-purple hover:bg-brand-purple-hover text-white px-8 py-4 rounded-xl font-bold transition-all shadow-xl hover:shadow-brand-purple/30 items-center gap-3">
                   {t.merchReserveBtn}
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                </button>
+                </Link>
                 <p className="mt-4 text-[10px] font-mono text-slate-400 uppercase tracking-wider">
                   {t.merchDisclaimer}
                 </p>

@@ -7,8 +7,10 @@ import PassaloportAppPage from './pages/PassaloportAppPage.tsx';
 import AdminPage from './pages/AdminPage.tsx';
 import LoginPage from './pages/LoginPage.tsx';
 import SchedulePage from './pages/SchedulePage.tsx';
+import CamisetaPage from './pages/CamisetaPage.tsx';
 import { AdminGuard } from './components/AdminGuard.tsx';
 import { LanguageProvider } from './context/LanguageContext.tsx';
+import { ToastProvider } from './context/ToastContext.tsx';
 import './index.css';
 
 const router = createBrowserRouter([
@@ -33,6 +35,10 @@ const router = createBrowserRouter([
     element: <SchedulePage />,
   },
   {
+    path: '/camiseta',
+    element: <CamisetaPage />,
+  },
+  {
     path: '/admin',
     element: (
       <AdminGuard>
@@ -44,8 +50,10 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <LanguageProvider>
-      <RouterProvider router={router} />
-    </LanguageProvider>
+    <ToastProvider>
+      <LanguageProvider>
+        <RouterProvider router={router} />
+      </LanguageProvider>
+    </ToastProvider>
   </StrictMode>,
 );

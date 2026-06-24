@@ -4,11 +4,13 @@ import { Map, MapPin, Calendar as CalendarIcon, ExternalLink, ChevronLeft, Chevr
 import { motion, AnimatePresence } from 'motion/react';
 import { RutaAdmin } from '../services/adminService';
 import { RoadmapTimeline } from './RoadmapTimeline';
+import { useToast } from '../context/ToastContext';
 
 export const WikilocRoutes = () => {
   const [rutas, setRutas] = useState<RutaAdmin[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<number>(0);
+  const { addToast } = useToast();
 
   useEffect(() => {
     const fetchRutas = async () => {
@@ -23,6 +25,7 @@ export const WikilocRoutes = () => {
         setRutas(data || []);
       } catch (err) {
         console.error("Error fetching routes:", err);
+        addToast("Error al cargar las rutas de Wikiloc", "error");
       } finally {
         setLoading(false);
       }
@@ -92,16 +95,35 @@ export const WikilocRoutes = () => {
         >
           {/* Columna Izquierda: Ficha Técnica */}
           <div className="lg:col-span-5 flex flex-col justify-center">
-            <div className="mb-6">
-              <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase mb-4 ${ruta.tipo_ruta?.toLowerCase().includes('gravel')
-                  ? 'bg-brand-ochre/20 text-brand-ochre'
-                  : 'bg-brand-dark-purple/10 text-brand-dark-purple'
-                }`}>
-                {ruta.tipo_ruta || 'Ruta'}
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-tight">
-                {ruta.nombre}
-              </h2>
+            <div className="mb-6 flex justify-between items-start gap-4">
+              <div>
+                <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase mb-4 ${ruta.tipo_ruta?.toLowerCase().includes('gravel')
+                    ? 'bg-brand-ochre/20 text-brand-ochre'
+                    : 'bg-brand-dark-purple/10 text-brand-dark-purple'
+                  }`}>
+                  {ruta.tipo_ruta || 'Ruta'}
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-tight">
+                  {ruta.nombre}
+                </h2>
+              </div>
+              
+              <div className="flex items-center gap-2 mt-2">
+                <button 
+                  onClick={() => setActiveTab(prev => Math.max(0, prev - 1))}
+                  disabled={activeTab === 0}
+                  className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-brand-purple hover:text-white hover:border-brand-purple transition-all disabled:opacity-50 disabled:pointer-events-none shadow-sm"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button 
+                  onClick={() => setActiveTab(prev => Math.min(rutas.length - 1, prev + 1))}
+                  disabled={activeTab === rutas.length - 1}
+                  className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-brand-purple hover:text-white hover:border-brand-purple transition-all disabled:opacity-50 disabled:pointer-events-none shadow-sm"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-4 mb-8">

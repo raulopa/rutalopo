@@ -28,6 +28,9 @@ create policy "Usuarios ven sus propias inscripciones" on public.inscripciones
 create policy "Usuarios pueden insertar sus propias inscripciones" on public.inscripciones
   for insert with check (auth.uid() = usuario_id);
 
+create policy "Usuarios pueden borrar sus propias inscripciones" on public.inscripciones
+  for delete using (auth.uid() = usuario_id);
+
 create policy "Admins ven todas las inscripciones" on public.inscripciones
   for select using (auth.jwt() ->> 'email' in ('tu-email-admin@ejemplo.com')); -- Cambiar por tu email admin
 
@@ -49,3 +52,27 @@ $$ language plpgsql;
 create trigger tr_check_aforo_inscripcion
   before insert on public.inscripciones
   for each row execute procedure check_aforo_antes_de_insert();
+
+-- 4. Crear la tabla de pedidos_camiseta
+create table public.pedidos_camiseta (
+  id uuid default gen_random_uuid() primary key,
+  usuario_id uuid references public.perfiles(id) on delete set null,
+  email_contacto text not null,
+  telefono_contacto text not null,
+  talla text not null,
+  fecha_pedido timestamp with time zone default timezone('utc'::text, now()) not null,
+  estado text default 'pendiente'
+);
+
+-- Habilitar seguridad de filas (RLS) para pedidos_camiseta
+alter table public.pedidos_camiseta enable row level security;
+
+create policy "Usuarios pueden insertar sus propios pedidos" on public.pedidos_camiseta
+  for insert with check (auth.uid() = usuario_id OR auth.uid() IS NULL);
+
+create policy "Usuarios ven sus propios pedidos" on public.pedidos_camiseta
+  for select using (auth.uid() = usuario_id);
+
+create policy "Admins ven todos los pedidos" on public.pedidos_camiseta
+  for select using (auth.jwt() ->> 'email' in ('tu-email-admin@ejemplo.com'));
+

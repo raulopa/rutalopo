@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { adminService, UsuarioPasaporte, RutaAdmin } from '../services/adminService';
-import { Users, Map, Plus, Edit2, Trash2, ChevronLeft, Save, X, CheckCircle, AlertCircle } from 'lucide-react';
+import { adminService, UsuarioPasaporte, RutaAdmin, CodigoAdmin, PedidoCamiseta } from '../services/adminService';
+import { Users, Map, Plus, Edit2, Trash2, ChevronLeft, Save, X, CheckCircle, AlertCircle, Ticket, ShoppingBag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { TopBanner } from '../components/TopBanner';
+import { useToast } from '../context/ToastContext';
 
-type Tab = 'usuarios' | 'rutas';
+type Tab = 'usuarios' | 'rutas' | 'pegatinas' | 'camisetas';
 
 export default function AdminPage() {
   const [activeTab, setActiveTab] = useState<Tab>('usuarios');
@@ -12,10 +13,12 @@ export default function AdminPage() {
   // Data states
   const [usuarios, setUsuarios] = useState<UsuarioPasaporte[]>([]);
   const [rutas, setRutas] = useState<RutaAdmin[]>([]);
+  const [codigos, setCodigos] = useState<CodigoAdmin[]>([]);
+  const [pedidos, setPedidos] = useState<PedidoCamiseta[]>([]);
   
   // UI states
   const [isLoading, setIsLoading] = useState(false);
-  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const { addToast } = useToast();
   
   // Routes form state
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -24,16 +27,16 @@ export default function AdminPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [searchEmail, setSearchEmail] = useState('');
 
-  const showToast = (message: string, type: 'success' | 'error') => {
-    setToast({ message, type });
-    setTimeout(() => setToast(null), 3000);
-  };
 
   useEffect(() => {
     if (activeTab === 'usuarios') {
       fetchUsuarios();
-    } else {
+    } else if (activeTab === 'rutas') {
       fetchRutas();
+    } else if (activeTab === 'pegatinas') {
+      fetchCodigos();
+    } else if (activeTab === 'camisetas') {
+      fetchPedidos();
     }
   }, [activeTab]);
 
@@ -44,7 +47,20 @@ export default function AdminPage() {
       setUsuarios(data);
     } catch (error) {
       console.error(error);
-      showToast('Error al cargar usuarios', 'error');
+      addToast('Error al cargar usuarios', 'error');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchCodigos = async () => {
+    setIsLoading(true);
+    try {
+      const data = await adminService.getCodigosPegatinas();
+      setCodigos(data);
+    } catch (error) {
+      console.error(error);
+      addToast('Error al cargar pegatinas', 'error');
     } finally {
       setIsLoading(false);
     }
@@ -57,7 +73,20 @@ export default function AdminPage() {
       setRutas(data);
     } catch (error) {
       console.error(error);
-      showToast('Error al cargar rutas', 'error');
+      addToast('Error al cargar rutas', 'error');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchPedidos = async () => {
+    setIsLoading(true);
+    try {
+      const data = await adminService.getPedidosCamiseta();
+      setPedidos(data);
+    } catch (error) {
+      console.error(error);
+      addToast('Error al cargar pedidos', 'error');
     } finally {
       setIsLoading(false);
     }
@@ -78,7 +107,8 @@ export default function AdminPage() {
         distancia_km: 0,
         desnivel_positivo: 0,
         wikiloc_id: '',
-        wikiloc_url: ''
+        wikiloc_url: '',
+        codigo_prefijo: ''
       });
     }
     setIsFormOpen(true);
@@ -96,16 +126,16 @@ export default function AdminPage() {
     try {
       if (editingRuta) {
         await adminService.updateRuta(editingRuta.id, formData);
-        showToast('Ruta actualizada con éxito', 'success');
+        addToast('Ruta actualizada con éxito', 'success');
       } else {
         await adminService.createRuta(formData as Omit<RutaAdmin, 'id'>);
-        showToast('Ruta creada con éxito', 'success');
+        addToast('Ruta creada con éxito', 'success');
       }
       handleCloseForm();
       fetchRutas();
     } catch (error) {
       console.error(error);
-      showToast('Error al guardar la ruta', 'error');
+      addToast('Error al guardar la ruta', 'error');
     } finally {
       setIsSubmitting(false);
     }
@@ -115,11 +145,11 @@ export default function AdminPage() {
     if (!window.confirm('¿Estás seguro de que deseas eliminar esta ruta? Se borrarán las conexiones.')) return;
     try {
       await adminService.deleteRuta(id);
-      showToast('Ruta eliminada con éxito', 'success');
+      addToast('Ruta eliminada con éxito', 'success');
       fetchRutas();
     } catch (error) {
       console.error(error);
-      showToast('Error al eliminar la ruta', 'error');
+      addToast('Error al eliminar la ruta', 'error');
     }
   };
 
@@ -131,13 +161,6 @@ export default function AdminPage() {
     <div className="min-h-screen bg-brand-beige flex flex-col font-sans text-black">
       <TopBanner />
       <div className="flex-1 flex">
-      {/* Toast Notification */}
-      {toast && (
-        <div className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 text-white animate-in slide-in-from-top-2 ${toast.type === 'success' ? 'bg-brand-green text-brand-forest' : 'bg-brand-purple'}`}>
-          {toast.type === 'success' ? <CheckCircle className="w-5 h-5" /> : <AlertCircle className="w-5 h-5" />}
-          <span className="font-medium">{toast.message}</span>
-        </div>
-      )}
 
       {/* Sidebar */}
       <aside className="w-64 bg-white border-r border-gray-200 flex flex-col hidden md:flex">
@@ -161,6 +184,20 @@ export default function AdminPage() {
             <Map className="w-5 h-5" />
             Rutas Wikiloc
           </button>
+          <button 
+            onClick={() => setActiveTab('pegatinas')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors ${activeTab === 'pegatinas' ? 'bg-brand-dark-purple text-white' : 'hover:bg-gray-100 text-gray-700'}`}
+          >
+            <Ticket className="w-5 h-5" />
+            Pegatinas
+          </button>
+          <button 
+            onClick={() => setActiveTab('camisetas')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors ${activeTab === 'camisetas' ? 'bg-brand-dark-purple text-white' : 'hover:bg-gray-100 text-gray-700'}`}
+          >
+            <ShoppingBag className="w-5 h-5" />
+            Pedidos Camiseta
+          </button>
         </nav>
 
         <div className="p-4 border-t border-gray-200">
@@ -178,6 +215,9 @@ export default function AdminPage() {
         </button>
         <button onClick={() => setActiveTab('rutas')} className={`p-3 rounded-full ${activeTab === 'rutas' ? 'bg-brand-dark-purple text-white' : 'text-gray-500'}`}>
           <Map className="w-6 h-6" />
+        </button>
+        <button onClick={() => setActiveTab('camisetas')} className={`p-3 rounded-full ${activeTab === 'camisetas' ? 'bg-brand-dark-purple text-white' : 'text-gray-500'}`}>
+          <ShoppingBag className="w-6 h-6" />
         </button>
       </div>
 
@@ -365,6 +405,16 @@ export default function AdminPage() {
                           className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-dark-purple focus:border-transparent font-medium"
                         />
                       </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-bold text-gray-700">Prefijo Pegatina</label>
+                        <input 
+                          type="text"
+                          value={formData.codigo_prefijo || ''}
+                          onChange={e => setFormData({...formData, codigo_prefijo: e.target.value})}
+                          placeholder="Ej. CARC.png"
+                          className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-dark-purple focus:border-transparent font-medium"
+                        />
+                      </div>
                       <div className="space-y-2 md:col-span-2">
                         <label className="text-sm font-bold text-gray-700">URL de Wikiloc</label>
                         <input 
@@ -481,6 +531,123 @@ export default function AdminPage() {
             )}
           </div>
         )}
+
+        {activeTab === 'pegatinas' && (
+          <div className="max-w-6xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <h2 className="text-3xl font-bold text-gray-900">Gestor de Pegatinas</h2>
+                <p className="text-gray-500 font-medium">Visualiza los códigos generados por usuario.</p>
+              </div>
+            </header>
+
+            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-gray-50 border-b border-gray-100">
+                      <th className="p-4 font-bold text-gray-600">Usuario</th>
+                      <th className="p-4 font-bold text-gray-600">Ruta</th>
+                      <th className="p-4 font-bold text-gray-600">Código</th>
+                      <th className="p-4 font-bold text-gray-600">Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-50">
+                    {codigos.map(c => (
+                      <tr key={c.id || c.codigo} className="hover:bg-gray-50/50 transition-colors">
+                        <td className="p-4 text-gray-900 font-medium">{c.usuario_email}</td>
+                        <td className="p-4 text-gray-600">{c.ruta_nombre}</td>
+                        <td className="p-4">
+                          <code className="bg-brand-purple/10 text-brand-dark-purple px-2 py-1 rounded font-mono font-bold tracking-wider">
+                            {c.codigo}
+                          </code>
+                        </td>
+                        <td className="p-4">
+                          {c.canjeado_el ? (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">
+                              <CheckCircle className="w-3 h-3" /> Canjeado
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700">
+                              Pendiente
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                    {codigos.length === 0 && (
+                      <tr>
+                        <td colSpan={4} className="p-8 text-center text-gray-500 font-medium">
+                          No hay códigos generados.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+        {activeTab === 'camisetas' && (
+          <div className="max-w-6xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <h2 className="text-3xl font-bold text-gray-900">Pedidos de Camiseta</h2>
+                <p className="text-gray-500 font-medium">Gestiona las solicitudes de camisetas técnicas.</p>
+              </div>
+              <div className="bg-white px-5 py-2 rounded-lg border border-gray-200 shadow-sm flex items-center gap-2">
+                <span className="text-gray-500 font-medium">Total:</span>
+                <span className="text-xl font-bold text-brand-dark-purple">{pedidos.length}</span>
+              </div>
+            </header>
+
+            {isLoading ? (
+              <div className="flex justify-center py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-dark-purple"></div>
+              </div>
+            ) : (
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-gray-50 border-b border-gray-200 text-gray-600 font-semibold text-sm uppercase tracking-wider">
+                        <th className="p-4 pl-6">Email / Contacto</th>
+                        <th className="p-4">Teléfono</th>
+                        <th className="p-4">Talla</th>
+                        <th className="p-4 pr-6">Fecha Pedido</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                      {pedidos.map((p) => (
+                        <tr key={p.id} className="hover:bg-gray-50 transition-colors">
+                          <td className="p-4 pl-6 font-medium text-gray-900">
+                            {p.email_contacto}
+                            {p.usuario_id && <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">Registrado</span>}
+                          </td>
+                          <td className="p-4 text-gray-600 font-mono text-sm">{p.telefono_contacto}</td>
+                          <td className="p-4">
+                            <span className="px-2.5 py-1 bg-brand-dark-purple/10 text-brand-dark-purple font-bold rounded-lg">{p.talla}</span>
+                          </td>
+                          <td className="p-4 pr-6 text-gray-500 text-sm">
+                            {p.fecha_pedido ? new Date(p.fecha_pedido).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-'}
+                          </td>
+                        </tr>
+                      ))}
+                      {pedidos.length === 0 && (
+                        <tr>
+                          <td colSpan={4} className="p-8 text-center text-gray-500">
+                            No hay pedidos de camiseta todavía.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
       </main>
       </div>
     </div>

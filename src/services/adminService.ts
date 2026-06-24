@@ -18,6 +18,27 @@ export interface RutaAdmin {
   distancia_km: number | null;
   desnivel_positivo: number | null;
   tipo_ruta: string | null;
+  codigo_prefijo?: string | null;
+}
+
+export interface CodigoAdmin {
+  id?: number;
+  codigo: string;
+  ruta_id: number;
+  usuario_id: string;
+  canjeado_el: string | null;
+  ruta_nombre?: string;
+  usuario_email?: string;
+}
+
+export interface PedidoCamiseta {
+  id?: string;
+  usuario_id: string | null;
+  email_contacto: string;
+  telefono_contacto: string;
+  talla: string;
+  fecha_pedido?: string;
+  estado?: string;
 }
 
 export const adminService = {
@@ -68,7 +89,8 @@ export const adminService = {
     const { data, error } = await supabase
       .from('rutas')
       .select('*')
-      .order('fecha', { ascending: true });
+      .order('fecha', { ascending: true })
+      .order('hora', { ascending: true });
 
     if (error) throw error;
     return data;
@@ -110,5 +132,50 @@ export const adminService = {
       .eq('id', id);
 
     if (error) throw error;
+  },
+
+  async getCodigosPegatinas(): Promise<CodigoAdmin[]> {
+    if (!supabase) throw new Error("Supabase is not configured.");
+
+    const { data: codigos, error: errorCodigos } = await supabase
+      .from('codigos_pegatinas')
+      .select('id, codigo, ruta_id, usuario_id, canjeado_el')
+      .order('id', { ascending: false });
+
+    if (errorCodigos) throw errorCodigos;
+
+    const { data: rutas } = await supabase.from('rutas').select('id, nombre');
+    const { data: perfiles } = await supabase.from('perfiles').select('id, email');
+
+    const rutasMap = new Map((rutas || []).map(r => [r.id, r.nombre]));
+    const perfilesMap = new Map((perfiles || []).map(p => [p.id, p.email]));
+
+    return codigos.map(c => ({
+      ...c,
+      ruta_nombre: rutasMap.get(c.ruta_id) || 'Ruta desconocida',
+      usuario_email: perfilesMap.get(c.usuario_id) || 'Usuario desconocido'
+    }));
+  },
+
+  async createPedidoCamiseta(pedido: PedidoCamiseta) {
+    if (!supabase) throw new Error("Supabase is not configured.");
+    const { data, error } = await supabase
+      .from('pedidos_camiseta')
+      .insert([pedido])
+      .select()
+      .single();
+    if (error) throw error;
+    return data;
+  },
+
+  async getPedidosCamiseta(): Promise<PedidoCamiseta[]> {
+    if (!supabase) throw new Error("Supabase is not configured.");
+    const { data, error } = await supabase
+      .from('pedidos_camiseta')
+      .select('*')
+      .order('fecha_pedido', { ascending: false });
+    if (error) throw error;
+    return data || [];
   }
 };
+

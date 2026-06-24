@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { authService } from '../services/authService';
+import { useToast } from '../context/ToastContext';
 
 interface AdminGuardProps {
   children: React.ReactNode;
@@ -9,6 +10,7 @@ interface AdminGuardProps {
 export const AdminGuard: React.FC<AdminGuardProps> = ({ children }) => {
   const [isChecking, setIsChecking] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const { addToast } = useToast();
 
   useEffect(() => {
     const checkAdmin = async () => {
@@ -23,6 +25,7 @@ export const AdminGuard: React.FC<AdminGuardProps> = ({ children }) => {
         }
       } catch (error) {
         console.error("Error checking admin status:", error);
+        addToast("Error al verificar estado de administrador", "error");
         setIsAdmin(false);
       } finally {
         setIsChecking(false);
