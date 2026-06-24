@@ -67,8 +67,8 @@ create table public.pedidos_camiseta (
 -- Habilitar seguridad de filas (RLS) para pedidos_camiseta
 alter table public.pedidos_camiseta enable row level security;
 
-create policy "Usuarios pueden insertar sus propios pedidos" on public.pedidos_camiseta
-  for insert with check (auth.uid() = usuario_id OR auth.uid() IS NULL);
+create policy "Permitir insertar a todos" on public.pedidos_camiseta
+  for insert to anon, authenticated with check (true);
 
 create policy "Usuarios ven sus propios pedidos" on public.pedidos_camiseta
   for select using (auth.uid() = usuario_id);

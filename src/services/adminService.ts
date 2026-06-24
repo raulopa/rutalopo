@@ -161,9 +161,8 @@ export const adminService = {
     if (!supabase) throw new Error("Supabase is not configured.");
     const { data, error } = await supabase
       .from('pedidos_camiseta')
-      .insert([pedido])
-      .select()
-      .single();
+      .insert([pedido]);
+      
     if (error) throw error;
     return data;
   },
