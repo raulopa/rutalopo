@@ -32,7 +32,7 @@ create policy "Usuarios pueden borrar sus propias inscripciones" on public.inscr
   for delete using (auth.uid() = usuario_id);
 
 create policy "Admins ven todas las inscripciones" on public.inscripciones
-  for select using (auth.jwt() ->> 'email' in ('tu-email-admin@ejemplo.com')); -- Cambiar por tu email admin
+  for select using (auth.jwt() ->> 'email' in ('rutalopo@gmail.com')); -- Cambiar por tu email admin
 
 -- TAREA CRÍTICA: Lógica de control de aforo (Máx 15 personas)
 create or replace function check_aforo_antes_de_insert()
@@ -74,5 +74,5 @@ create policy "Usuarios ven sus propios pedidos" on public.pedidos_camiseta
   for select using (auth.uid() = usuario_id);
 
 create policy "Admins ven todos los pedidos" on public.pedidos_camiseta
-  for select using (auth.jwt() ->> 'email' in ('tu-email-admin@ejemplo.com'));
+  for select using (auth.jwt() ->> 'email' in ('rutalopo@gmail.com'));
 

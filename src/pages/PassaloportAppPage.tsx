@@ -38,6 +38,11 @@ const getStickerUrl = (prefix: string | null) => {
 const DashboardView = ({ user, routesData, onLogout, onReload }: any) => {
   const { lang, t } = useLanguage();
   const { addToast } = useToast();
+
+  useEffect(() => {
+    document.title = "La Rutalopó - " + (t.navDigitalPassport || "Passaloport App");
+  }, [t]);
+
   const [passcode, setPasscode] = useState("");
   const [validating, setValidating] = useState(false);
   const [successAnim, setSuccessAnim] = useState<number | null>(null);
@@ -89,7 +94,7 @@ const DashboardView = ({ user, routesData, onLogout, onReload }: any) => {
           </div>
           <div>
             <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">{t.ppDashRole}</p>
-            <h2 className="text-lg font-bold text-slate-800">{user.email}</h2>
+            <h1 className="text-lg font-bold text-slate-800">{user.email}</h1>
           </div>
         </div>
         <button

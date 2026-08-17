@@ -5,10 +5,12 @@ interface BlurTextProps {
   text: string;
   className?: string;
   delay?: number;
+  as?: 'h1' | 'h2' | 'h3' | 'p' | 'span' | 'div';
 }
 
-export function BlurText({ text, className = "", delay = 0 }: BlurTextProps) {
+export function BlurText({ text, className = "", delay = 0, as = "div" }: BlurTextProps) {
   const words = text.split(" ");
+  const MotionComponent = motion[as as keyof typeof motion] as any;
 
   const container = {
     hidden: { opacity: 0 },
@@ -37,7 +39,7 @@ export function BlurText({ text, className = "", delay = 0 }: BlurTextProps) {
   };
 
   return (
-    <motion.div
+    <MotionComponent
       className={`flex flex-wrap ${className}`}
       variants={container}
       initial="hidden"
@@ -53,6 +55,6 @@ export function BlurText({ text, className = "", delay = 0 }: BlurTextProps) {
           {word}
         </motion.span>
       ))}
-    </motion.div>
+    </MotionComponent>
   );
 }

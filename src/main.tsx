@@ -8,6 +8,7 @@ import AdminPage from './pages/AdminPage.tsx';
 import LoginPage from './pages/LoginPage.tsx';
 import SchedulePage from './pages/SchedulePage.tsx';
 import CamisetaPage from './pages/CamisetaPage.tsx';
+import NotFoundPage from './pages/NotFoundPage.tsx';
 import { AdminGuard } from './components/AdminGuard.tsx';
 import { LanguageProvider } from './context/LanguageContext.tsx';
 import { ToastProvider } from './context/ToastContext.tsx';
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
         <AdminPage />
       </AdminGuard>
     ),
+  },
+  {
+    path: '*',
+    element: <NotFoundPage />,
   },
 ]);
 

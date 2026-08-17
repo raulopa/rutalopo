@@ -46,6 +46,10 @@ export default function App() {
     authService.getCurrentUser().then(setUser);
   }, []);
 
+  useEffect(() => {
+    document.title = "La Rutalopó - " + (t.navConcept || "Inici");
+  }, [t]);
+
   // Route filter states
   const [difficultyFilter, setDifficultyFilter] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -217,6 +221,7 @@ export default function App() {
             </motion.div>
 
             <BlurText
+              as="h1"
               text={`${t.heroTitle.split(', ')[0]}, ${t.heroTitle.split(', ')[1]}`}
               className="text-4xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight text-brand-purple leading-[1.12]"
               delay={0.1}
@@ -744,7 +749,6 @@ export default function App() {
                 {t.footerGeoInfoDesc}
               </p>
             </div>
-
           </div>
 
           {/* CRITICAL LIABILITY DISCLOSER COMPREHENSIVE TEXT FOR LEGAL COVERAGE */}

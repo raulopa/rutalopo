@@ -10,6 +10,10 @@ type Tab = 'usuarios' | 'rutas' | 'pegatinas' | 'camisetas';
 export default function AdminPage() {
   const [activeTab, setActiveTab] = useState<Tab>('usuarios');
   
+  useEffect(() => {
+    document.title = "La Rutalopó - Panel de Administración";
+  }, []);
+  
   // Data states
   const [usuarios, setUsuarios] = useState<UsuarioPasaporte[]>([]);
   const [rutas, setRutas] = useState<RutaAdmin[]>([]);

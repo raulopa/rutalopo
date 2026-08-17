@@ -19,7 +19,8 @@ export const WikilocRoutes = () => {
         const { data, error } = await supabase
           .from('rutas')
           .select('*')
-          .order('fecha', { ascending: true });
+          .order('fecha', { ascending: true })
+          .order('hora', { ascending: true });
 
         if (error) throw error;
         setRutas(data || []);

@@ -1,0 +1,5 @@
+# La Rutalopó
+
+La Rutalopó es un proyecto de rutas de montaña, cultura y lengua.
+Esta aplicación web proporciona un catálogo interactivo de rutas de montaña en la zona (Wikiloc), así como un pasaporte digital (Passaloport) para registrar el progreso.
+También incluye recomendaciones de convivencia en la montaña y venta de camisetas oficiales.

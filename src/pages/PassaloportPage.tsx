@@ -15,6 +15,10 @@ import { TopBanner } from "../components/TopBanner";
 export default function PassaloportPage() {
   const { t } = useLanguage();
 
+  React.useEffect(() => {
+    document.title = "La Rutalopó - Passaloport";
+  }, [t]);
+
   return (
     <div className="min-h-screen bg-brand-beige text-slate-800 font-sans selection:bg-brand-purple selection:text-white flex flex-col">
       <TopBanner />
@@ -41,11 +45,11 @@ export default function PassaloportPage() {
               <Award className="w-4 h-4" />
               {t.ppHeroBadge}
             </div>
-            
+
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.12] text-white">
               {t.ppHeroTitle1}<span className="text-brand-ochre">{t.ppHeroTitle2}</span>
             </h1>
-            
+
             <p className="text-base sm:text-lg text-brand-beige/80 max-w-xl leading-relaxed">
               {t.ppHeroSubtitle}
             </p>
@@ -61,7 +65,7 @@ export default function PassaloportPage() {
           {/* Hero Visual Mockup */}
           <div className="relative mx-auto w-full max-w-md hidden lg:block">
             <div className="absolute inset-0 bg-brand-ochre blur-3xl opacity-20 rounded-full"></div>
-            <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&q=80&w=800&h=1000" alt="Senderismo Passaloport" className="rounded-3xl border-4 border-brand-ochre shadow-2xl relative transform rotate-2 hover:rotate-0 transition-transform duration-500 object-cover aspect-[3/4]" />
+            <img src="https://s1.wklcdn.com/image_457/13732533/231203621/138272572Master.jpg" alt="Senderismo Passaloport" className="rounded-3xl border-4 border-brand-ochre shadow-2xl relative transform rotate-2 hover:rotate-0 transition-transform duration-500 object-cover aspect-[3/4]" />
           </div>
         </div>
       </section>
@@ -77,7 +81,7 @@ export default function PassaloportPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
           <div className="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-brand-purple/10 -z-10 -translate-y-12"></div>
-          
+
           <div className="bg-white border border-brand-purple/20 rounded-2xl p-8 text-center space-y-4 relative shadow-sm">
             <div className="w-16 h-16 mx-auto bg-brand-purple text-brand-beige rounded-2xl flex items-center justify-center shadow-md -mt-12 mb-4 border-4 border-white">
               <Map className="w-8 h-8 text-brand-ochre" />
@@ -122,26 +126,21 @@ export default function PassaloportPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-16">
             <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 transition-colors">
-              <div className="text-4xl mb-4">🍇</div>
+              <div className="text-4xl mb-4">🍷</div>
               <h4 className="font-bold text-white text-lg">{t.ppPrize1Title}</h4>
               <p className="text-xs text-brand-beige/70 mt-2">{t.ppPrize1Desc}</p>
             </div>
             <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 transition-colors">
-              <div className="text-4xl mb-4">🍷</div>
+              <div className="text-4xl mb-4">🧺</div>
               <h4 className="font-bold text-white text-lg">{t.ppPrize2Title}</h4>
               <p className="text-xs text-brand-beige/70 mt-2">{t.ppPrize2Desc}</p>
             </div>
             <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 transition-colors">
-              <div className="text-4xl mb-4">🧺</div>
+              <div className="text-4xl mb-4">🚵</div>
               <h4 className="font-bold text-white text-lg">{t.ppPrize3Title}</h4>
               <p className="text-xs text-brand-beige/70 mt-2">{t.ppPrize3Desc}</p>
-            </div>
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 transition-colors">
-              <div className="text-4xl mb-4">🚵</div>
-              <h4 className="font-bold text-white text-lg">{t.ppPrize4Title}</h4>
-              <p className="text-xs text-brand-beige/70 mt-2">{t.ppPrize4Desc}</p>
             </div>
           </div>
 

@@ -17,6 +17,10 @@ export default function CamisetaPage() {
   const { addToast } = useToast();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  useEffect(() => {
+    document.title = "La Rutalopó - " + (t.navShirt || "Samarreta");
+  }, [t]);
+
   // Modal and Form state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user, setUser] = useState<any>(null);

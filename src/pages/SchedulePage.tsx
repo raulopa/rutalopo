@@ -15,6 +15,10 @@ export default function SchedulePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    document.title = "La Rutalopó - " + (t.navSchedule || "Cronograma");
+  }, [t]);
+
+  useEffect(() => {
     const fetchSchedule = async () => {
       try {
         const data = await adminService.getAllRutasAdmin();

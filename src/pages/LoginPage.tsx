@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { MountainSnow, ChevronLeft } from "lucide-react";
 import { motion } from "motion/react";
@@ -12,6 +12,10 @@ export default function LoginPage() {
   const location = useLocation();
   const { t } = useLanguage();
   const { addToast } = useToast();
+
+  useEffect(() => {
+    document.title = "La Rutalopó - " + (t.navLogin || "Login");
+  }, [t]);
 
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const [email, setEmail] = useState("");
@@ -73,9 +77,9 @@ export default function LoginPage() {
           <div className="bg-brand-purple p-8 text-center relative overflow-hidden">
             <div className="absolute inset-0 bg-brand-ochre/10 blur-xl rounded-full translate-y-8"></div>
             <MountainSnow className="w-16 h-16 text-brand-ochre mx-auto mb-4 relative z-10" />
-            <h2 className="text-3xl font-extrabold text-white relative z-10 tracking-tight">
+            <h1 className="text-3xl font-extrabold text-white relative z-10 tracking-tight">
               {authMode === 'login' ? (t.ppAuthWelcome || "Bienvenido") : (t.ppAuthJoin || "Únete a la Aventura")}
-            </h2>
+            </h1>
             <p className="text-brand-beige/80 text-sm mt-2 relative z-10">
               {t.ppAuthSubtitle || "Inicia sesión para gestionar tu pasaporte digital"}
             </p>
