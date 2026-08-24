@@ -230,7 +230,6 @@ export const ca = {
   merchFeature2Title: "Disseny Harmònic",
   merchFeature2Desc: "Tons arena amb accents en morat raïm clàssic.",
   merchReserveBtn: "Sol·licita la teua",
-  merchDisclaimer: "* Disponibilitat exclusiva per a participants del Passaloport",
 
   // Passaloport Teaser
   passaloportHeroTitle1: "Completa rutes. Col·lecciona pegatines.",
@@ -314,9 +313,9 @@ export const ca = {
   shirtPrice: "15€",
   shirtBuy: "Demana la teua",
   shirtFeaturesTitle: "Característiques",
-  shirtFeature1: "Teixit transpirable d'alta tecnologia",
+  shirtFeature1: "Teixit transpirable",
   shirtFeature2: "Ajust ergonòmic per a màxim confort",
-  shirtFeature3: "Assecat ultraràpid",
+  shirtFeature3: "Assecat ràpid",
   shirtBack: "Tornar a l'Inici",
   shirtModalTitle: "Sol·licitar Samarreta",
   shirtModalEmail: "Email de contacte",
