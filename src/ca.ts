@@ -310,7 +310,7 @@ export const ca = {
   // Camiseta Page
   shirtTitle: "Samarreta Tècnica La Rutalopó",
   shirtSubtitle: "Teixit tècnic i ergonòmic ideal per a rutes. Disseny exclusiu.",
-  shirtPrice: "15€",
+  shirtPrice: "12€",
   shirtBuy: "Demana la teua",
   shirtFeaturesTitle: "Característiques",
   shirtFeature1: "Teixit transpirable",

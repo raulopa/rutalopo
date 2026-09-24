@@ -86,42 +86,42 @@ export const RouteCard: React.FC<RouteCardProps> = ({
         {/* ==================================================== */}
         {/* PARTE SUPERIOR (65%) */}
         {/* ==================================================== */}
-        <div className="h-[65%] w-full flex flex-col p-5 sm:p-6 relative z-10">
+        <div className="h-[65%] w-full flex flex-col p-3 sm:p-5 relative z-10 overflow-hidden">
 
           {/* HEADER */}
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex justify-between items-center mb-2 sm:mb-4">
             <div className="flex items-center gap-1.5 text-brand-ochre">
-              <Compass className="w-5 h-5" />
-              <span className="font-black tracking-widest text-[10px] sm:text-xs">RUTALOPO</span>
+              <Compass className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="font-black tracking-widest text-[9px] sm:text-[10px]">RUTALOPO</span>
             </div>
             <div
-              className="px-1 py-1 rounded-full border border-emerald-500/30 bg-emerald-50 text-emerald-600 text-[7px] font-black tracking-widest uppercase shadow-sm"
+              className="px-1.5 py-0.5 rounded-full border border-emerald-500/30 bg-emerald-50 text-emerald-600 text-[6px] sm:text-[7px] font-black tracking-widest uppercase shadow-sm"
             >
               VALIDADA
             </div>
           </div>
 
           {/* TÍTULO */}
-          <div className="mb-4 flex-1 flex flex-col justify-center">
-            <h2 className="font-black text-brand-purple text-2xl sm:text-3xl leading-[1.1] uppercase break-words drop-shadow-sm">
+          <div className="mb-2 sm:mb-4 flex-1 flex flex-col justify-center min-h-0">
+            <h2 className="font-black text-brand-purple text-lg sm:text-2xl leading-[1.1] uppercase break-words drop-shadow-sm line-clamp-3">
               {title}
             </h2>
-            <span className="text-slate-400 text-xs mt-1 font-bold tracking-wide uppercase">
+            <span className="text-slate-400 text-[9px] sm:text-xs mt-1 font-bold tracking-wide uppercase">
               Colección Oficial
             </span>
           </div>
 
           {/* GRID DE DATOS (KM y Desnivel) */}
-          <div className="grid grid-cols-2 gap-y-3 gap-x-2">
+          <div className="grid grid-cols-2 gap-y-1 gap-x-2 mt-auto">
             <div>
-              <p className="text-[9px] text-slate-400 font-bold tracking-widest uppercase mb-0.5">Distancia</p>
-              <p className="text-sm font-black text-slate-800">
+              <p className="text-[8px] sm:text-[9px] text-slate-400 font-bold tracking-widest uppercase mb-0.5">Distancia</p>
+              <p className="text-xs sm:text-sm font-black text-slate-800">
                 {distancia ? `${distancia} km` : '-'}
               </p>
             </div>
             <div>
-              <p className="text-[9px] text-slate-400 font-bold tracking-widest uppercase mb-0.5">Desnivel</p>
-              <p className="text-sm font-black text-slate-800">
+              <p className="text-[8px] sm:text-[9px] text-slate-400 font-bold tracking-widest uppercase mb-0.5">Desnivel</p>
+              <p className="text-xs sm:text-sm font-black text-slate-800">
                 {desnivel ? `+${desnivel} m` : '-'}
               </p>
             </div>

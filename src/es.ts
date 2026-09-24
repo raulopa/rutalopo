@@ -319,7 +319,7 @@ export const es = {
   // Camiseta Page
   shirtTitle: "Camiseta Técnica La Rutalopó",
   shirtSubtitle: "Tejido técnico y ergonómico ideal para rutas. Diseño exclusivo.",
-  shirtPrice: "15€",
+  shirtPrice: "12€",
   shirtBuy: "Comprar Ahora",
   shirtFeaturesTitle: "Características",
   shirtFeature1: "Tejido transpirable",

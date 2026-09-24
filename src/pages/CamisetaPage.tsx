@@ -11,6 +11,9 @@ import { useToast } from "../context/ToastContext";
 import bannerImg from "../../assets/camiseta_banner.webp";
 import camisetaFrontImg from "../../assets/camiseta_delante.webp";
 import camisetaBackImg from "../../assets/camiseta_detras.webp";
+import cami1Img from "../../assets/cami1.jpeg";
+import cami2Img from "../../assets/cami2.jpeg";
+import cami3Img from "../../assets/cami3.jpeg";
 
 export default function CamisetaPage() {
   const { t } = useLanguage();
@@ -36,7 +39,7 @@ export default function CamisetaPage() {
     });
   }, []);
 
-  const images = [camisetaBackImg, camisetaFrontImg];
+  const images = [camisetaBackImg, camisetaFrontImg, cami1Img, cami2Img, cami3Img];
 
   const nextImage = () => setCurrentImageIndex((prev) => (prev + 1) % images.length);
   const prevImage = () => setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);

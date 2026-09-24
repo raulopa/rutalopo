@@ -319,7 +319,7 @@ export const en = {
   // Camiseta Page
   shirtTitle: "La Rutalopó Technical T-Shirt",
   shirtSubtitle: "Technical and ergonomic fabric ideal for trails. Exclusive design.",
-  shirtPrice: "15€",
+  shirtPrice: "12€",
   shirtBuy: "Request yours",
   shirtFeaturesTitle: "Features",
   shirtFeature1: "High-tech breathable fabric",

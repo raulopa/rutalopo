@@ -18,7 +18,8 @@ import React, { useState, useEffect } from "react"; import {
   Info,
   MapPin,
   X,
-  Share2
+  Share2,
+  Shirt
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
@@ -49,6 +50,28 @@ export default function App() {
   useEffect(() => {
     document.title = "La Rutalopó - " + (t.navConcept || "Inici");
   }, [t]);
+
+  // T-Shirt Promo Modal & Widget
+  const [showShirtModal, setShowShirtModal] = useState(false);
+  const [showShirtWidget, setShowShirtWidget] = useState(false);
+
+  useEffect(() => {
+    const hasSeenModal = sessionStorage.getItem('hasSeenShirtModal');
+    if (!hasSeenModal) {
+      const timer = setTimeout(() => {
+        setShowShirtModal(true);
+        sessionStorage.setItem('hasSeenShirtModal', 'true');
+      }, 1500);
+      return () => clearTimeout(timer);
+    } else {
+      setShowShirtWidget(true);
+    }
+  }, []);
+
+  const handleCloseShirtModal = () => {
+    setShowShirtModal(false);
+    setShowShirtWidget(true);
+  };
 
   // Route filter states
   const [difficultyFilter, setDifficultyFilter] = useState<string>("All");
@@ -914,6 +937,103 @@ export default function App() {
               </div>
             </div>
           </div>
+        )}
+      </AnimatePresence>
+
+      {/* T-SHIRT PROMO MODAL */}
+      <AnimatePresence>
+        {showShirtModal && (
+          <div className="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+              <div onClick={handleCloseShirtModal} className="fixed inset-0 bg-slate-950/70 transition-opacity" aria-hidden="true"></div>
+              <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+              
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="inline-block align-bottom bg-white rounded-3xl border-2 border-brand-purple text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full relative z-10"
+              >
+                <button
+                  onClick={handleCloseShirtModal}
+                  className="absolute top-4 right-4 z-20 text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-full p-2 transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+
+                <div className="relative overflow-hidden bg-white p-8 sm:p-12">
+                  <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-brand-purple/5 via-transparent to-transparent pointer-events-none"></div>
+                  
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div className="relative group hidden sm:block">
+                      <div className="absolute inset-0 bg-brand-ochre/20 rounded-3xl transform rotate-3 scale-105 transition-transform group-hover:rotate-6 group-hover:scale-110 duration-500"></div>
+                      <div className="relative bg-brand-beige rounded-3xl p-8 border-2 border-brand-purple/10 shadow-xl aspect-[4/5] flex items-center justify-center overflow-hidden">
+                        <img
+                          src={camisetaDetrasImg}
+                          alt="Camiseta Oficial La Rutalopó"
+                          className="w-full h-full object-contain mix-blend-multiply opacity-90 transition-transform duration-700 group-hover:scale-105"
+                        />
+                        <div className="absolute top-4 left-4 bg-brand-purple text-brand-beige text-[10px] font-mono font-bold uppercase tracking-widest px-3 py-1.5 rounded-full shadow-lg">
+                          {t.merchLimited}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-8 relative z-10">
+                      <div className="space-y-4">
+                        <span className="text-xs font-mono font-extrabold text-brand-ochre uppercase tracking-widest block flex items-center gap-2">
+                          <span className="w-8 h-px bg-brand-ochre"></span>
+                          {t.merchOfficial}
+                        </span>
+                        <h2
+                          className="text-3xl sm:text-4xl font-extrabold text-brand-purple tracking-tight leading-tight"
+                          dangerouslySetInnerHTML={{ __html: t.merchTitle }}
+                        />
+                        <p className="text-base text-slate-600 leading-relaxed font-medium">
+                          {t.merchDesc}
+                        </p>
+                      </div>
+                      <div className="pt-4 flex items-center gap-4">
+                        <Link to="/camiseta" onClick={handleCloseShirtModal} className="inline-flex w-auto bg-brand-purple hover:bg-brand-purple-hover text-white px-8 py-4 rounded-xl font-bold transition-all shadow-xl hover:shadow-brand-purple/30 items-center gap-3">
+                          {t.merchReserveBtn}
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </Link>
+                        <button onClick={handleCloseShirtModal} className="text-sm font-semibold text-slate-500 hover:text-slate-800 transition-colors">
+                          {t.cancel || "Cerrar"}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* FLOATING WIDGET FOR QUICK ACCESS */}
+      <AnimatePresence>
+        {showShirtWidget && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.8 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 50, scale: 0.8 }}
+            className="fixed bottom-6 right-6 z-40"
+          >
+            <button
+              onClick={() => {
+                setShowShirtWidget(false);
+                setShowShirtModal(true);
+              }}
+              className="group relative flex items-center justify-center bg-brand-purple hover:bg-brand-purple-hover text-white p-4 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgb(139,92,246,0.3)] transition-all transform hover:-translate-y-1"
+            >
+              <div className="absolute inset-0 bg-white/20 rounded-full animate-ping opacity-75"></div>
+              <Shirt className="w-6 h-6 relative z-10" />
+              <span className="hidden sm:inline-block max-w-0 overflow-hidden group-hover:max-w-[200px] transition-all duration-300 ease-in-out whitespace-nowrap font-bold text-sm relative z-10">
+                <span className="pl-2">{t.navShirt}</span>
+              </span>
+            </button>
+          </motion.div>
         )}
       </AnimatePresence>
 
