@@ -19,7 +19,8 @@ import React, { useState, useEffect } from "react"; import {
   MapPin,
   X,
   Share2,
-  Shirt
+  Shirt,
+  Menu
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
@@ -42,6 +43,7 @@ export default function App() {
   const { lang, t } = useLanguage();
   const location = useLocation();
   const [user, setUser] = useState<any>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     authService.getCurrentUser().then(setUser);
@@ -192,7 +194,9 @@ export default function App() {
           </div>
 
           <nav className="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-700">
-            <a href="#concepto" className="hover:text-brand-purple transition-colors">{t.navConcept}</a>
+            {t.navConcept && (
+              <a href="#concepto" className="hover:text-brand-purple transition-colors">{t.navConcept}</a>
+            )}
             <Link to="/passaloport" className="hover:text-brand-purple transition-colors">Passaloport</Link>
             <Link to="/cronograma" className="hover:text-brand-purple transition-colors">{t.navSchedule}</Link>
             <Link to="/patrimoni" className="hover:text-brand-purple transition-colors">Patrimoni</Link>
@@ -201,13 +205,10 @@ export default function App() {
             <a href="#manual" className="hover:text-brand-purple transition-colors">{t.navGuide}</a>
           </nav>
 
-          <div className="flex items-center gap-3">
-            <div className="hidden sm:block">
-            </div>
-
+          <div className="flex items-center gap-2 sm:gap-3">
             <Link
               to="/passaloport"
-              className="bg-brand-purple text-brand-beige hover:bg-brand-purple-hover-light transition-all px-4 py-2 rounded-xl text-xs font-semibold shadow-xs"
+              className="hidden sm:inline-block bg-brand-purple text-brand-beige hover:bg-brand-purple-hover-light transition-all px-4 py-2 rounded-xl text-xs font-semibold shadow-xs"
             >
               {t.navDigitalPassport}
             </Link>
@@ -216,12 +217,96 @@ export default function App() {
                 <UserCheck className="w-4 h-4" />
               </Link>
             ) : (
-              <Link to="/login" state={{ from: location }} className="bg-brand-beige text-brand-purple border border-brand-purple/20 hover:bg-brand-purple/5 transition-all px-4 py-2 rounded-xl text-xs font-semibold shadow-xs">
+              <Link to="/login" state={{ from: location }} className="bg-brand-beige text-brand-purple border border-brand-purple/20 hover:bg-brand-purple/5 transition-all px-3 sm:px-4 py-2 rounded-xl text-xs font-semibold shadow-xs">
                 {t.navLogin}
               </Link>
             )}
+
+            {/* Botón de menú móvil */}
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen((prev) => !prev)}
+              aria-label="Obrir menú"
+              className="md:hidden p-2 rounded-xl text-brand-purple hover:bg-brand-purple/10 transition-colors"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
           </div>
         </div>
+
+        {/* Menú desplegable en móvil */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.nav
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden overflow-hidden border-t border-brand-purple/10 mt-3 pt-3 pb-2 flex flex-col gap-1 text-sm font-semibold text-slate-700"
+            >
+              {t.navConcept && (
+                <a
+                  href="#concepto"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-2.5 rounded-xl hover:bg-brand-purple/5 hover:text-brand-purple transition-colors"
+                >
+                  {t.navConcept}
+                </a>
+              )}
+              <Link
+                to="/passaloport"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2.5 rounded-xl hover:bg-brand-purple/5 hover:text-brand-purple transition-colors"
+              >
+                Passaloport
+              </Link>
+              <Link
+                to="/cronograma"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2.5 rounded-xl hover:bg-brand-purple/5 hover:text-brand-purple transition-colors"
+              >
+                {t.navSchedule}
+              </Link>
+              <Link
+                to="/patrimoni"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2.5 rounded-xl hover:bg-brand-purple/5 hover:text-brand-purple transition-colors"
+              >
+                Patrimoni
+              </Link>
+              <a
+                href="#rutas"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2.5 rounded-xl hover:bg-brand-purple/5 hover:text-brand-purple transition-colors"
+              >
+                {t.navRoutes}
+              </a>
+              <Link
+                to="/camiseta"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2.5 rounded-xl hover:bg-brand-purple/5 hover:text-brand-purple transition-colors"
+              >
+                {t.navShirt}
+              </Link>
+              <a
+                href="#manual"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2.5 rounded-xl hover:bg-brand-purple/5 hover:text-brand-purple transition-colors"
+              >
+                {t.navGuide}
+              </a>
+
+              <div className="pt-2 mt-1 border-t border-brand-purple/10 sm:hidden">
+                <Link
+                  to="/passaloport"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block w-full text-center bg-brand-purple text-brand-beige hover:bg-brand-purple-hover-light transition-all px-4 py-2.5 rounded-xl text-xs font-semibold shadow-xs"
+                >
+                  {t.navDigitalPassport}
+                </Link>
+              </div>
+            </motion.nav>
+          )}
+        </AnimatePresence>
       </header>
 
       {/* HERO SECTION */}
