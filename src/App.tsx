@@ -53,20 +53,7 @@ export default function App() {
 
   // T-Shirt Promo Modal & Widget
   const [showShirtModal, setShowShirtModal] = useState(false);
-  const [showShirtWidget, setShowShirtWidget] = useState(false);
-
-  useEffect(() => {
-    const hasSeenModal = sessionStorage.getItem('hasSeenShirtModal');
-    if (!hasSeenModal) {
-      const timer = setTimeout(() => {
-        setShowShirtModal(true);
-        sessionStorage.setItem('hasSeenShirtModal', 'true');
-      }, 1500);
-      return () => clearTimeout(timer);
-    } else {
-      setShowShirtWidget(true);
-    }
-  }, []);
+  const [showShirtWidget, setShowShirtWidget] = useState(true);
 
   const handleCloseShirtModal = () => {
     setShowShirtModal(false);
@@ -208,6 +195,7 @@ export default function App() {
             <a href="#concepto" className="hover:text-brand-purple transition-colors">{t.navConcept}</a>
             <Link to="/passaloport" className="hover:text-brand-purple transition-colors">Passaloport</Link>
             <Link to="/cronograma" className="hover:text-brand-purple transition-colors">{t.navSchedule}</Link>
+            <Link to="/patrimoni" className="hover:text-brand-purple transition-colors">Patrimoni</Link>
             <a href="#rutas" className="hover:text-brand-purple transition-colors">{t.navRoutes}</a>
             <Link to="/camiseta" className="hover:text-brand-purple transition-colors">{t.navShirt}</Link>
             <a href="#manual" className="hover:text-brand-purple transition-colors">{t.navGuide}</a>
@@ -355,6 +343,13 @@ export default function App() {
                 <p className="text-sm text-slate-600 leading-relaxed font-medium">
                   {t.pilar2Body}
                 </p>
+                <Link
+                  to="/patrimoni"
+                  className="inline-flex items-center gap-1.5 text-xs font-extrabold text-brand-purple hover:text-brand-purple-hover underline underline-offset-4 pt-1"
+                >
+                  <span>Explorar catàleg d&apos;elements singulars (Forns de guix)</span>
+                  <ChevronRight className="w-4 h-4" />
+                </Link>
               </div>
               <div className="pt-6 mt-8 border-t border-brand-purple/10 flex items-center justify-between text-xs font-mono font-bold text-slate-500">
                 <span>{t.conceptTag2a}</span>

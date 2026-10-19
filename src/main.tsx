@@ -8,6 +8,8 @@ import AdminPage from './pages/AdminPage.tsx';
 import LoginPage from './pages/LoginPage.tsx';
 import SchedulePage from './pages/SchedulePage.tsx';
 import CamisetaPage from './pages/CamisetaPage.tsx';
+import SingularElementsPage from './pages/SingularElementsPage.tsx';
+import SingularElementDetailPage from './pages/SingularElementDetailPage.tsx';
 import NotFoundPage from './pages/NotFoundPage.tsx';
 import { AdminGuard } from './components/AdminGuard.tsx';
 import { LanguageProvider } from './context/LanguageContext.tsx';
@@ -38,6 +40,18 @@ const router = createBrowserRouter([
   {
     path: '/camiseta',
     element: <CamisetaPage />,
+  },
+  {
+    path: '/patrimoni',
+    element: <SingularElementsPage />,
+  },
+  {
+    path: '/patrimoni/:municipio',
+    element: <SingularElementsPage />,
+  },
+  {
+    path: '/patrimoni/:municipio/:id',
+    element: <SingularElementDetailPage />,
   },
   {
     path: '/admin',
