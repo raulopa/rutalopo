@@ -50,7 +50,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    document.title = "La Rutalopó - " + (t.navConcept || "Inici");
+    document.title = "La Rutalopó - " + (t.navConcept || "Cultura, Muntanya i Llengua");
   }, [t]);
 
   // T-Shirt Promo Modal & Widget
