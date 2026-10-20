@@ -382,11 +382,13 @@ export default function SingularElementDetailPage() {
               </section>
             </div>
 
-            {/* SECCIÓN TÉCNICA PARA FORNS: SUPERFÍCIE, FORN(S) Y PATI CENTRAL */}
-            {(hasFornSection || fichaTecnica.patiCentral) && (
+            {/* SECCIÓN TÉCNICA PARA FORNS: SUPERFÍCIE, FORN(S) Y PATI CENTRAL / ERA */}
+            {(hasFornSection || fichaTecnica.patiCentral || fichaTecnica.era) && (
               <section
                 className={`grid grid-cols-1 ${
-                  hasFornSection && fichaTecnica.patiCentral ? 'md:grid-cols-2' : ''
+                  hasFornSection && (fichaTecnica.patiCentral || fichaTecnica.era)
+                    ? 'md:grid-cols-2'
+                    : ''
                 } gap-6`}
               >
                 {hasFornSection && (
@@ -428,7 +430,8 @@ export default function SingularElementDetailPage() {
                                 <CircleDot className="w-4 h-4 text-brand-purple mt-0.5 flex-shrink-0" />
                                 <div>
                                   <span className="text-xs text-stone-500 block">
-                                    {isMultiForn ? `Diàmetre ${idx + 1}` : 'Diàmetre'}
+                                    {forn.diametreLabel ||
+                                      (isMultiForn ? `Diàmetre ${idx + 1}` : 'Diàmetre')}
                                   </span>
                                   <span className="text-lg font-bold text-stone-900">
                                     {forn.diametre}
@@ -440,7 +443,8 @@ export default function SingularElementDetailPage() {
                                 <ArrowUpDown className="w-4 h-4 text-brand-purple mt-0.5 flex-shrink-0" />
                                 <div>
                                   <span className="text-xs text-stone-500 block">
-                                    {isMultiForn ? `Alçària ${idx + 1}` : 'Alçària'}
+                                    {forn.alcariaLabel ||
+                                      (isMultiForn ? `Alçària ${idx + 1}` : 'Alçària')}
                                   </span>
                                   <span className="text-lg font-bold text-stone-900">
                                     {forn.alcaria}
@@ -528,6 +532,38 @@ export default function SingularElementDetailPage() {
                           )}
                         </>
                       )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Bloque 2 alternativo: Era */}
+                {fichaTecnica.era && (
+                  <div className="bg-white rounded-xl p-6 border border-stone-200/90 shadow-xs space-y-4">
+                    <h3 className="text-base font-bold text-stone-900 flex items-center gap-2">
+                      <Compass className="w-4 h-4 text-brand-ochre" />
+                      Era
+                    </h3>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="bg-brand-beige/60 rounded-xl p-4 border border-stone-200/60 flex items-start gap-3">
+                        <CircleDot className="w-4 h-4 text-stone-600 mt-0.5 flex-shrink-0" />
+                        <div>
+                          <span className="text-xs text-stone-500 block">Diàmetre</span>
+                          <span className="text-lg font-bold text-stone-900">
+                            {fichaTecnica.era.diametre}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="bg-brand-beige/60 rounded-xl p-4 border border-stone-200/60 flex items-start gap-3">
+                        <Layers className="w-4 h-4 text-stone-600 mt-0.5 flex-shrink-0" />
+                        <div>
+                          <span className="text-xs text-stone-500 block">Superfície</span>
+                          <span className="text-lg font-bold text-stone-900">
+                            {fichaTecnica.era.superficie}
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}

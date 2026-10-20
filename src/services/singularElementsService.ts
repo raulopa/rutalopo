@@ -4,9 +4,19 @@ import { supabase } from './supabaseClient';
  * Dimensiones específicas de cada cilindro/cámara del horno (Forn)
  */
 export interface FornDimensions {
-  label?: string;   // Ej: "Forn 1", "Forn 2" (opcional si solo hay uno)
-  diametre: string; // Ej: "2,30 m" o "2,50 m"
-  alcaria: string;  // Ej: "4,45 m" o "3,30 m"
+  label?: string;         // Ej: "Forn 1", "Forn 2" (opcional si solo hay uno)
+  diametre: string;       // Ej: "2,30 m" o "2,50 m"
+  alcaria: string;        // Ej: "4,45 m" o "3,30 m"
+  diametreLabel?: string; // Ej: "Diàmetre interior"
+  alcariaLabel?: string;  // Ej: "Alçària cúpula"
+}
+
+/**
+ * Dimensiones de la Era asociada al horno
+ */
+export interface EraDimensions {
+  diametre: string;   // Ej: "3,5 m²"
+  superficie: string; // Ej: "40 m²"
 }
 
 /**
@@ -36,6 +46,7 @@ export interface FornTechnicalSpecs {
   fornsTitle?: string;                // Ej: "Dimensions del Forn" o "Dimensions dels forns 1 i 2"
   dimensionsForn?: FornDimensions[];
   patiCentral?: PatiCentralDimensions;
+  era?: EraDimensions;
   dadesTecniques?: CustomTechnicalItem[];
 }
 
@@ -251,39 +262,33 @@ export const SINGULAR_ELEMENTS_MOCK: SingularElement[] = [
   {
     id: 'forn-4',
     nombre: 'Forn d’Algeps núm. 4',
-    subtituloPropietari: 'Desconegut el propietari inicial',
+    subtituloPropietari: 'Forn d’Emilio',
     municipioSlug: 'el-pinos',
     poblacio: 'El Pinós',
     categoria: 'Forns de guix',
     caracteristiques:
-      'Forn de doble cilindre de cocció. Originalment cobert amb teulada, en el qual destaca l’espai central, tot enllosat, per a mòlta d’Algeps. Han desaparegut el pilar–eix central i rul·lo, per al triturat de la pedra. Adossat el magatzem del material.',
+      'Sense estructures associades. Forn originàriament amb cúpula tancada i respiradors a la part superior. Amb una Era per a dipositar material.',
     storage: {
       folderPath: 'forn-4',
       mainImageFile: 'forn-4-1.jpg',
       galleryFiles: ['forn-4-1.jpg', 'forn-4-2.jpg', 'forn-4-3.jpg'],
     },
     fichaTecnica: {
-      propietariInicial: 'Desconegut el propietari inicial',
+      propietariInicial: 'Forn d’Emilio',
       tipusProduccio: 'Industrial',
-      superficieTotal: '120 m²',
-      fornsTitle: 'Dimensions dels forns 1 i 2',
+      superficieTotal: '100 m²',
+      fornsTitle: 'Dimensions del Forn',
       dimensionsForn: [
         {
-          label: 'Forn 1',
-          diametre: '2,50 m',
-          alcaria: '3,30 m',
-        },
-        {
-          label: 'Forn 2',
-          diametre: '2,50 m',
-          alcaria: '3,30 m',
+          diametre: '2 m',
+          alcaria: '5 m',
+          diametreLabel: 'Diàmetre interior',
+          alcariaLabel: 'Alçària cúpula',
         },
       ],
-      patiCentral: {
-        superficie: '96 m²',
-        radiGirTrituracio: '3 m',
-        radiGirLabel: "Radi de gir del cercle de xafat d'algeps",
-        pilarEixEstat: 'Desaparegut',
+      era: {
+        diametre: '3,5 m²',
+        superficie: '40 m²',
       },
     },
   },
